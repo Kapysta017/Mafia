@@ -1,0 +1,17 @@
+header{
+    height: 70px;
+    display: flex;
+    background-color: black;
+}
+
+.header_container{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+.container_grid_element{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
