@@ -1,0 +1,36 @@
+.start_container{
+
+}
+
+.start_container main {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px
+}
+
+.start_container h1{
+    margin-top: 40px;
+    place-self: center;
+}
+.container_element{
+    height: 400px;
+    display: grid;
+    justify-content: center;
+}
+
+.image{
+    border-radius: 5px;
+    width: 400px;
+    height: 200px;
+    background-color: orange;
+}
+
+.text{
+    background-color: orangered;
+    height: 150px;
+}
+.button{
+    background-color: yellow;
+    height: 48px;
+}

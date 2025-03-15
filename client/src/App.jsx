@@ -1,18 +1,22 @@
 import "./App.scss";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./colorThemes/theme";
+import { Home } from "./view/home/Home";
+import { StartGamePage } from "./view/start/StartGame";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./layoutComponents/Layout";
-function Home() {
-  return <h1>Головна сторінка</h1>;
-}
+import { Layout } from "./layoutComponents/Layout";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-        </Route>
-      </Routes>
+      <ThemeProvider theme={theme}>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/start" element={<StartGamePage />} />
+          </Routes>
+        </Layout>
+      </ThemeProvider>
     </Router>
   );
 }

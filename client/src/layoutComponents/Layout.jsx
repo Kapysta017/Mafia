@@ -1,13 +1,11 @@
 import { Footer } from "./footer";
 import { Header } from "./Header";
-import { Outlet } from "react-router-dom";
 
-export default function Layout() {
-  console.log("Layout рендериться");
+export function Layout({ children }) {
   return (
-    <div>
+    <div className="layout">
       <Header />
-      <Outlet />
+      <main className="content">{children}</main>
       <Footer />
     </div>
   );
