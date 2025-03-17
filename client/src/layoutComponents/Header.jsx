@@ -1,10 +1,11 @@
-import { colors } from "@mui/material";
-import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-
+import { Button } from "../components/Button";
+import { useNavigate } from "react-router-dom";
 export function Header() {
-  const theme = useTheme();
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/start");
+  };
   return (
     <header>
       <div className="header_container">
@@ -17,11 +18,7 @@ export function Header() {
           <div className="container_grid_element">Донат</div>
         </div>
         <div className="container_grid_element">
-          <Button
-            href="/start"
-            variant="contained"
-            sx={{ bgcolor: "ochre.action" }}
-          >
+          <Button variant="action" size="medium" onClick={handleClick}>
             Start Game
           </Button>
         </div>
