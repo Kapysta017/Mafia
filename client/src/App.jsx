@@ -2,6 +2,7 @@ import "./App.scss";
 import { Home } from "./view/home/Home";
 import { StartGamePage } from "./view/start/StartGamePage";
 import { CreateGamePage } from "./view/create/CreateGamePage";
+import { BrowsePage } from "./view/join/BrowsePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./layoutComponents/Layout";
 
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/start" element={<StartGamePage />} />
           <Route path="/create" element={<CreateGamePage />} />
+          <Route path="/list" element={<BrowsePage />} />
         </Routes>
       </Layout>
     </Router>
