@@ -3,8 +3,8 @@ import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 export function Header() {
   const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/start");
+  const handleClick = (path) => {
+    navigate(`${path}`);
   };
   return (
     <header>
@@ -18,7 +18,11 @@ export function Header() {
           <div className="container_grid_element">Донат</div>
         </div>
         <div className="container_grid_element">
-          <Button variant="action" size="medium" onClick={handleClick}>
+          <Button
+            variant="action"
+            size="medium"
+            onClick={() => handleClick("start")}
+          >
             Start Game
           </Button>
         </div>
