@@ -1,3 +1,14 @@
-main{
-    min-height: 100vh;
+footer{
+    display: flex;
+    background-color: black;
+    height: 120px;
+    width: 100%;
+    
 }
+
+.footer_container{
+    max-width: 1440px;
+    width: 100%;
+    margin: auto;
+}
+

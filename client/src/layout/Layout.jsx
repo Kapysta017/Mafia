@@ -4,7 +4,9 @@ export function Layout({ children }) {
     <div className="layout">
       <Header />
       <main className="content">{children}</main>
-      <footer>Я футер</footer>
+      <footer>
+        <div className="footer_container"></div>
+      </footer>
     </div>
   );
 }
