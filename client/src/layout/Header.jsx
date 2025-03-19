@@ -10,12 +10,20 @@ export function Header() {
     <header>
       <div className="header_container">
         <div className="container_grid_element">
-          <Link to={"/"}>Мафія Онлайн</Link>
+          <Link to={"/"}>
+            <div className="bc1">Мафія Онлайн</div>
+          </Link>
         </div>
         <div className="header_container">
-          <div className="container_grid_element">Про сайт</div>
-          <div className="container_grid_element">Правила</div>
-          <div className="container_grid_element">Донат</div>
+          <div className="container_grid_element">
+            <p className="bc2">Про сайт</p>
+          </div>
+          <div className="container_grid_element">
+            <p className="bc2">Правила</p>
+          </div>
+          <div className="container_grid_element">
+            <p className="bc2">Донат</p>
+          </div>
         </div>
         <div className="container_grid_element">
           <Button
