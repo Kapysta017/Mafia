@@ -12,32 +12,38 @@ export function StartGamePage() {
         <div className="container_element">
           <div className="image">image</div>
           <div className="text"> text</div>
-          <Button
-            variant="action"
-            size="large"
-            onClick={() => handleClick("create")}
-          >
-            Create Game
-          </Button>
-        </div>
-        <div className="container_element">
-          <div className="image">image</div>
-          <div className="text"> text</div>
-          <div className="button">
-            <input type="text" placeholder="Введіть код"></input>
-            <Button>Join</Button>
+          <div className="button_container">
+            <Button
+              variant="primary"
+              size="large"
+              onClick={() => handleClick("create")}
+            >
+              Create Game
+            </Button>
           </div>
         </div>
         <div className="container_element">
           <div className="image">image</div>
           <div className="text"> text</div>
-          <Button
-            variant="action"
-            size="large"
-            onClick={() => handleClick("list")}
-          >
-            Browse List
-          </Button>
+          <div className="join_button_container">
+            <input type="text" placeholder="Введіть код"></input>
+            <Button variant="primary" size="small" disabled>
+              Join
+            </Button>
+          </div>
+        </div>
+        <div className="container_element">
+          <div className="image">image</div>
+          <div className="text"> text</div>
+          <div className="button_container">
+            <Button
+              variant="primary"
+              size="large"
+              onClick={() => handleClick("list")}
+            >
+              Browse List
+            </Button>
+          </div>
         </div>
       </main>
     </div>

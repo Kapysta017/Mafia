@@ -2,52 +2,64 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease-in-out;
     font-weight: 600;
+    font-family: "Ubuntu";
   }
   
   .btn-small {
-    padding: 5px 10px;
+    padding: 0px;
     font-size: 14px;
   }
   
   .btn-medium {
-    padding: 8px 16px;
+    padding: 8px;
     font-size: 16px;
   }
   
   .btn-large {
-    width: 400px;
-    height: 48px;
-    padding: 12px 24px;
-    font-size: 18px;
+    padding: 8px;
+    font-size: 24px;
   }
   
   /* Варіанти кольорів */
-  .btn-action {
-    background-color: #ff8e3d;
-    color: black;
+  .btn-primary {
+    background-color: #DC791E;
+    color: #161616;
   }
   
-  .btn-action:hover {
-    background-color: #a56436;
+  .btn-primary:hover {
+    box-shadow: 0px 0px 10px 0px #FFF;
   }
   
+  .btn-primary:active{
+    background-color: #B26218;
+  }
+
   .btn-secondary {
-    background-color: #6c757d;
-    color: white;
+    border: solid #A54018 1px;
+    background-color: #161616;
+    color: #A54018;
   }
   
   .btn-secondary:hover {
-    background-color: #545b62;
+    color:#DC791E;
+    border: solid #DC791E 1px;
+    background-color: #1F1B18;
+  }
+
+  .btn-secondary:active{
+    border: solid #995415 1px;
+    color:#995415;
+  }
+
+  .btn:disabled {
+    
+    box-shadow: none;
+    cursor: not-allowed;
+    border: solid #3D3D3D 2px;
+    background-color: #161616;
+    color: #3D3D3D;
   }
   
-  .btn-danger {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .btn-danger:hover {
-    background-color: #a71d2a;
-  }
   

@@ -1,5 +1,5 @@
 .start_container{
-
+margin-bottom: 40px;
 }
 
 .start_container main {
@@ -10,10 +10,11 @@
 }
 
 .start_container h1{
-    margin-top: 40px;
+    margin: 40px;
     margin-bottom: 40px;
     place-self: center;
 }
+
 .container_element{
     height: 400px;
     display: grid;
@@ -28,12 +29,22 @@
 }
 
 .text{
-    background-color: orangered;
     height: 150px;
 }
-.button{
-    gap: 40px;
+
+.button_container{
+    display: flex;
+    
+    height: 48px;
+
+    button{
+        flex-grow: 1;
+    }
+}
+
+.join_button_container{
+    justify-content: space-between;
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 295px 85px;
     height: 48px;
 }

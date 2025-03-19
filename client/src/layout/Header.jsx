@@ -26,13 +26,15 @@ export function Header() {
           </div>
         </div>
         <div className="container_grid_element">
-          <Button
-            variant="action"
-            size="medium"
-            onClick={() => handleClick("start")}
-          >
-            Start Game
-          </Button>
+          <div className="header_button_container">
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={() => handleClick("start")}
+            >
+              Почати гру
+            </Button>
+          </div>
         </div>
       </div>
     </header>

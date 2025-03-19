@@ -1,12 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const Button = ({
-  variant = "primary",
-  size = "medium",
-  children,
-  ...props
-}) => {
+export const Button = ({ variant, size, children, ...props }) => {
   return (
     <button className={`btn btn-${variant} btn-${size}`} {...props}>
       {children}
