@@ -1,5 +1,6 @@
 .start_container{
 margin-bottom: 40px;
+min-height: 800px;
 }
 
 .start_container main {
@@ -9,9 +10,9 @@ margin-bottom: 40px;
     gap: 20px
 }
 
-.start_container h1{
-    margin: 40px;
-    margin-bottom: 40px;
+.start_container h2{
+    margin-top: 60px;
+    margin-bottom: 30px;
     place-self: center;
 }
 
@@ -25,16 +26,31 @@ margin-bottom: 40px;
     border-radius: 5px;
     width: 400px;
     height: 200px;
-    background-color: orange;
 }
 
 .text{
+    display: grid;
+    grid-template-rows: 1fr 2fr;
     height: 150px;
+
+    h3{
+        place-self: center;
+        margin-top: 10px;
+        font-weight: 300;
+    }
+    ul{
+        margin-top: 10px;
+    }
+    li{
+        margin-left: 20px;
+        padding: 2px;
+        color: #B0B1B2;
+    }
 }
 
 .button_container{
+
     display: flex;
-    
     height: 48px;
 
     button{

@@ -40,7 +40,7 @@
 .rules {
     display: grid;
     justify-content: center;
-    padding-top: 40px;
+    padding-top: 90px;
     flex-grow: 1; 
 
     h2{
@@ -51,10 +51,10 @@
 .rules_list{
     border-radius: 10px;
     border: solid 1px #2d2d2d;
-    padding: 15px 0px 0px 40px;
+    padding: 15px 0px 0px 20px;
     margin-top: 30px;
     width: 1000px;
-    min-height: 280px;
+    min-height: 250px;
     background-color: #1c1c1c;
 
     li{
