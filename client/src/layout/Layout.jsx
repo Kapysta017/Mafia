@@ -26,7 +26,7 @@ export function Layout({ children }) {
             <Link to={"/"}>
               <p className="hf">Почати Гру</p>
             </Link>
-            <Link to={"/"}>
+            <Link to={"/profile"}>
               <p className="hf">Особистий Кабінет</p>
             </Link>
             <Link to={"/"}>
