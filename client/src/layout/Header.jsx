@@ -11,25 +11,31 @@ export function Header() {
       <div className="header_container">
         <div className="container_grid_element">
           <Link to={"/"}>
-            <div className="bc1">Мафія Онлайн</div>
+            <h4>Мафія Онлайн</h4>
           </Link>
         </div>
         <div className="header_container">
           <div className="container_grid_element">
-            <p className="bc2">Про сайт</p>
+            <Link to={"/"}>
+              <p className="hf">Про сайт</p>
+            </Link>
           </div>
           <div className="container_grid_element">
-            <p className="bc2">Правила</p>
+            <Link to={"/"}>
+              <p className="hf">Правила</p>
+            </Link>
           </div>
           <div className="container_grid_element">
-            <p className="bc2">Донат</p>
+            <Link to={"/"}>
+              <p className="hf">Донат</p>
+            </Link>
           </div>
         </div>
         <div className="container_grid_element">
           <div className="header_button_container">
             <Button
               variant="primary"
-              size="medium"
+              size="small"
               onClick={() => handleClick("start")}
             >
               Почати гру

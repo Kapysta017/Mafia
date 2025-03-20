@@ -24,7 +24,7 @@ export function StartGamePage() {
           <div className="button_container">
             <Button
               variant="primary"
-              size="large"
+              size="medium"
               onClick={() => handleClick("create")}
             >
               Створити Гру
@@ -67,7 +67,7 @@ export function StartGamePage() {
           <div className="button_container">
             <Button
               variant="primary"
-              size="large"
+              size="medium"
               onClick={() => handleClick("list")}
             >
               Переглянути Список

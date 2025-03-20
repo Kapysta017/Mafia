@@ -31,7 +31,15 @@ header{
     align-items: center;
 }
 
+.header_button_container{
+    display: flex;
+    height: 40px;
+    width: 112px;
 
+    button{
+        flex-grow: 1;
+    }
+}
 
 a {
     text-decoration: none;

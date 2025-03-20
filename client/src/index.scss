@@ -6,31 +6,53 @@
   
   body {
     font-family: "Ubuntu";
+    font-weight: 400;
+    font-size: 24px;
     background-color: #161616;
     color: #f7f8fa;
-    margin: auto;
-    font-size: 24px;
   }
 
   h1{
-    font-family: 'Piazzolla';
+    font-family: 'Noto Serif';
     font-weight: 700;
     color: #FFF;
     font-size: 64px;
   }
 
   h2{
-    font-weight: 500;
-    font-family: 'Piazzolla';
+    font-weight: 700;
+    font-family: 'Noto Serif';
     color: #fafbfd;
     font-size: 48px;
   }
   
   h3{
-    font-family: 'Piazzolla';
+    font-family: 'Ubuntu';
     font-weight: 500;
-    color: #fafbfd;
+    color: #D1D1D1;
     font-size: 24px;
+    line-height: 100%;
+  }
+
+  h4{
+    font-family: 'Noto Serif';
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: 1px;
+  }
+
+  .hf{
+    font-family: "Open Sans";
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+  }
+
+  .hf2{
+    font-family: "Open Sans";  
+    font-size: 14px;
+    font-weight: 400;
   }
 
   .bc2{
