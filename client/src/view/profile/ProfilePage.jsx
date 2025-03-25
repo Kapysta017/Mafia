@@ -8,7 +8,6 @@ export function ProfilePage() {
   };
   const handleClick = () => {
     localStorage.setItem("profileName", profileName);
-    console.log("Ім'я збережене:", profileName);
   };
   return (
     <>

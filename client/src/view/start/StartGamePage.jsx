@@ -1,10 +1,45 @@
 import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
+
+const API_URL = "http://localhost:3000/lobby";
 export function StartGamePage() {
+  const [username, setUsername] = useState("");
+  const [lobbyId, setLobbyId] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  useEffect(() => {
+    setUsername(localStorage.getItem("profileName"));
+  }, []);
+
   const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+    setLobbyId(event.target.value);
+  };
+
   const handleClick = (path) => {
     navigate(`/${path}`);
   };
+
+  const joinLobby = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/join/${lobbyId}`, {
+        lobbyId: lobbyId,
+        username: username,
+      });
+      if (response.data.success) {
+        console.log("Гравець приєднався:", response.data.players);
+        navigate(`/lobby/${lobbyId}`);
+      } else {
+        console.error("Помилка приєднання:", response.data.message);
+      }
+    } catch (err) {
+      console.error("Помилка приєднання:", err);
+    }
+  };
+
   return (
     <div className="start_container">
       <h2>Обрати режим</h2>
@@ -45,8 +80,18 @@ export function StartGamePage() {
             </ul>
           </div>
           <div className="join_button_container">
-            <input type="text" placeholder="Введіть код"></input>
-            <Button variant="primary" size="small" disabled>
+            <input
+              onChange={handleChange}
+              value={lobbyId}
+              type="text"
+              placeholder="Введіть код"
+            ></input>
+            <Button
+              variant="primary"
+              size="small"
+              disabled={!inputValue.trim()}
+              onClick={joinLobby}
+            >
               {`>`}
             </Button>
           </div>

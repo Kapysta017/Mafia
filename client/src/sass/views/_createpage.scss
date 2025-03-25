@@ -1,0 +1,42 @@
+.create_image_container{
+    height: 450px;
+    background-image: url("images/create_page.png");
+    background-size: cover; 
+    background-position: center;
+    display: grid;
+    justify-content: center;
+
+    h2{
+        place-self: center;
+    }
+}
+
+.page_content{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.settings_dashboard{
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        margin-top: 10px;
+        flex: 1 1 calc(50% - 10px)
+    }
+}
+
+.go_next_button{
+    display: flex;
+    height: 52px;
+    width: 190px;
+    place-self: center;
+
+    button{
+        width: 100%;
+    }
+}
