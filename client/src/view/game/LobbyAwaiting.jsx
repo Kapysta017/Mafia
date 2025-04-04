@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { HostLobby } from "./HostLobby";
+import { PlayerLobby } from "./PlayerLobby";
 import { io } from "socket.io-client";
+
 export function LobbyAwainting() {
   const { lobbyId } = useParams();
+  const isHost = localStorage.getItem("isHost") === "true";
   const [host, setHost] = useState("");
   const [users, setUsers] = useState([]);
   const socket = io("http://localhost:3000");
@@ -20,23 +24,25 @@ export function LobbyAwainting() {
       return null;
     }
   };
+
   useEffect(() => {
     getLobby(lobbyId);
   }, [lobbyId]);
-  socket.emit("joinLobby", { lobbyId });
-  socket.on("lobbyUpdated", (updatedPlayers) => {
-    setUsers(updatedPlayers);
-  });
-  return (
-    <div>
-      <h2>Лобі ID: {lobbyId}</h2>
-      <h3>Хост: {host}</h3>
-      <h3>Гравці:</h3>
-      <ul>
-        {users.map((user, index) => (
-          <li key={index}>{user}</li>
-        ))}
-      </ul>
-    </div>
-  );
+
+  useEffect(() => {
+    socket.emit("joinLobby", { lobbyId });
+
+    const handleLobbyUpdate = (updatedPlayers) => {
+      setUsers(updatedPlayers);
+    };
+
+    socket.on("lobbyUpdated", handleLobbyUpdate);
+
+    return () => {
+      socket.off("lobbyUpdated", handleLobbyUpdate);
+      socket.disconnect();
+    };
+  }, [lobbyId]);
+
+  return isHost ? <HostLobby /> : <PlayerLobby host={host} users={users} />;
 }

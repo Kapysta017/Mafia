@@ -24,23 +24,23 @@
   }
   
   .btn-primary:hover {
-    box-shadow: 0px 0px 10px 0px #FFF;
+    background-color: #E89D37;
   }
   
   .btn-primary:active{
-    background-color: #B26218;
+    background-color: #C75C18;
   }
 
   .btn-secondary {
-    border: solid #A54018 1px;
-    background-color: #161616;
-    color: #A54018;
+    border: solid #DC791E 2px;
+    background-color: transparent;
+    color: #DC791E;
   }
   
   .btn-secondary:hover {
-    color:#DC791E;
-    border: solid #DC791E 1px;
-    background-color: #1F1B18;
+    color:#E89D37;
+    border: solid #E89D37 2px;
+
   }
 
   .btn-secondary:active{

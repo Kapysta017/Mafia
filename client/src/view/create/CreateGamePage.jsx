@@ -18,6 +18,7 @@ export function CreateGamePage() {
         hostName: username,
       });
       const lobbyId = response.data;
+      localStorage.setItem("isHost", "true");
       navigate(`/lobby/${lobbyId}`);
     } catch (error) {
       console.error("Помилка створення лобі:", error);
