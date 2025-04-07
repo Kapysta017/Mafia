@@ -1,0 +1,39 @@
+footer{
+    display: flex;
+    background-color: black;
+    height: 132px;
+    width: 100%;
+}
+
+.footer_container{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.footer_name{
+    display: grid;
+    justify-content: center;
+
+    .name{
+
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        gap: 20px;
+        height: 82px;
+    }
+
+    p{
+        color:#e7e7e7;
+    }
+}
+
+.footer_links{
+    margin-right: 70px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    align-items: center;
+    gap:20px
+}

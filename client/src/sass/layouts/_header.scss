@@ -1,7 +1,21 @@
 header{
-    height: 70px;
+    width: 100%;
+    height: 76px;
     display: flex;
     background-color: black;
+    justify-content: center;
+
+    .bc1{
+        font-family: "Ubuntu";
+        color: #f7f8fa;
+        font-size: 20px;
+    }
+
+    .bc2{
+        font-family: "Ubuntu";
+        color: #f7f8fa;
+        font-size: 16px;
+    }
 }
 
 .header_container{
@@ -15,3 +29,35 @@ header{
     justify-content: center;
     align-items: center;
 }
+
+.interactive_elements{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 112px 40px;
+}
+
+.header_button_container{
+    display: flex;
+    height: 40px;
+    width: 112px;
+
+    button{
+        flex-grow: 1;
+    }
+}
+
+.profile_avatar{
+    background-image: url("/icons/avatar.png");
+    background-size: cover; 
+    margin-left: 40px;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+  }

@@ -1,0 +1,60 @@
+.btn {
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight:400;
+    font-family: "Ubuntu";
+  }
+  
+  .btn-small {
+    padding: 0px;
+    font-size: 14px;
+  }
+  
+  .btn-medium {
+    padding: 8px;
+    font-size: 24px;
+  }
+  
+  /* Варіанти кольорів */
+  .btn-primary {
+    background-color: #DC791E;
+    color: #161616;
+  }
+  
+  .btn-primary:hover {
+    background-color: #E89D37;
+  }
+  
+  .btn-primary:active{
+    background-color: #C75C18;
+  }
+
+  .btn-secondary {
+    border: solid #DC791E 2px;
+    background-color: transparent;
+    color: #DC791E;
+  }
+  
+  .btn-secondary:hover {
+    color:#E89D37;
+    border: solid #E89D37 2px;
+
+  }
+
+  .btn-secondary:active{
+    border: solid #995415 1px;
+    color:#995415;
+  }
+
+  .btn:disabled {
+    
+    box-shadow: none;
+    cursor: not-allowed;
+    border: solid #3D3D3D 2px;
+    background-color: #161616;
+    color: #3D3D3D;
+  }
+  
+  

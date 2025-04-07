@@ -1,0 +1,27 @@
+input[type="text"]{
+
+    border-radius: 2px;
+    border: solid #A54018 1px;
+    background-color: #161616;
+    color: #A54018;
+    padding: 0px;
+    font-family: 'Ubuntu';
+    font-size: 20px;
+    padding: 10px;
+}
+
+input[type="text"]:focus{
+    outline: none;
+    color:#DC791E;
+    border: solid #DC791E 1px;
+    border-color: #A54018;
+    background-color: #1F1B18;
+    box-shadow: 0px 0px 5px #DC791E; 
+}
+
+input[type="text"]::placeholder{
+    color: #DC791E;
+    font-family: 'Ubuntu';
+    
+    font-size: 20px;
+}

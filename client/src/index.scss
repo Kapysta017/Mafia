@@ -5,8 +5,64 @@
   }
   
   body {
-    font-family: "Balsamiq Sans", Arial, Helvetica, sans-serif;
-    background-color: #333;
-    color: white;
+    font-family: "Ubuntu";
+    font-weight: 400;
+    font-size: 24px;
+    background-color: #161616;
+    color: #f7f8fa;
+  }
+
+  h1{
+    font-family: 'Noto Serif';
+    font-weight: 700;
+    color: #FFF;
+    font-size: 64px;
+  }
+
+  h2{
+    font-weight: 700;
+    font-family: 'Noto Serif';
+    color: #fafbfd;
+    font-size: 48px;
   }
   
+  h3{
+    font-family: 'Ubuntu';
+    font-weight: 500;
+    color: #D1D1D1;
+    font-size: 24px;
+    line-height: 100%;
+  }
+
+  h4{
+    font-family: 'Noto Serif';
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: 1px;
+  }
+
+  .hf{
+    font-family: "Open Sans";
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+  }
+
+  .hf2{
+    font-family: "Open Sans";  
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .bc2{
+    font-family: "Ubuntu";
+    color: #f7f8fa;
+    font-size: 14px;
+  }
+
+  .bc3{
+    font-family: "Ubuntu";
+    color: #87694E;
+    font-size: 12px;
+  }
