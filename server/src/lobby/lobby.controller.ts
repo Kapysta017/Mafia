@@ -5,16 +5,25 @@ import { LobbyService } from './lobby.service';
 export class LobbyController {
   constructor(private readonly lobbyService: LobbyService) {}
 
-  @Post('create')
-  createLobby(@Body('hostName') hostName: string) {
-    return this.lobbyService.createLobby(hostName);
+  @Post('createLobby')
+  create(@Body() body: { hostName: string; avatarId: number }) {
+    return this.lobbyService.createLobby(body.hostName, body.avatarId);
   }
 
   @Post('join/:lobbyId')
   joinLobby(
-    @Body() { lobbyId, username }: { lobbyId: string; username: string },
+    @Body()
+    {
+      lobbyId,
+      username,
+      avatarId,
+    }: {
+      lobbyId: string;
+      username: string;
+      avatarId: number;
+    },
   ) {
-    return this.lobbyService.joinLobby(lobbyId, username);
+    return this.lobbyService.joinLobby(lobbyId, { username, avatarId });
   }
 
   @Get(':lobbyId')

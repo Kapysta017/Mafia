@@ -7,9 +7,11 @@ const API_URL = "http://localhost:3000/lobby";
 export function StartGamePage() {
   const [username, setUsername] = useState("");
   const [lobbyId, setLobbyId] = useState("");
+  const [avatarId, setAvatarId] = useState("");
   const [inputValue, setInputValue] = useState("");
   useEffect(() => {
     setUsername(localStorage.getItem("profileName"));
+    setAvatarId(Number(localStorage.getItem("profileAvatarId")));
   }, []);
 
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ export function StartGamePage() {
       const response = await axios.post(`${API_URL}/join/${lobbyId}`, {
         lobbyId: lobbyId,
         username: username,
+        avatarId: avatarId,
       });
       if (response.data.success) {
         console.log("Гравець приєднався:", response.data.players);

@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 export function LobbyAwainting() {
   const { lobbyId } = useParams();
   const isHost = localStorage.getItem("isHost") === "true";
-  const [host, setHost] = useState("");
+  const [host, setHost] = useState({});
   const [users, setUsers] = useState([]);
   const socket = io("http://localhost:3000");
   const getLobby = async (lobbyId) => {
@@ -16,8 +16,7 @@ export function LobbyAwainting() {
       const response = await axios.get(
         `http://localhost:3000/lobby/${lobbyId}`
       );
-      console.log("Лобі:", response.data);
-      setHost(response.data.hostName);
+      setHost(response.data.host);
       setUsers(response.data.players);
     } catch (error) {
       console.error("Помилка отримання лобі:", error);
@@ -27,9 +26,6 @@ export function LobbyAwainting() {
 
   useEffect(() => {
     getLobby(lobbyId);
-  }, [lobbyId]);
-
-  useEffect(() => {
     socket.emit("joinLobby", { lobbyId });
 
     const handleLobbyUpdate = (updatedPlayers) => {
@@ -40,7 +36,6 @@ export function LobbyAwainting() {
 
     return () => {
       socket.off("lobbyUpdated", handleLobbyUpdate);
-      socket.disconnect();
     };
   }, [lobbyId]);
 
