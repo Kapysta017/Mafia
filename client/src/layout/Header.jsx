@@ -31,7 +31,7 @@ export function Header() {
             </Link>
           </div>
         </div>
-        <div className="container_grid_element">
+        <div className="interactive_elements">
           <div className="header_button_container">
             <Button
               variant="primary"
@@ -41,6 +41,10 @@ export function Header() {
               Почати гру
             </Button>
           </div>
+          <div
+            onClick={() => handleClick("profile")}
+            className="profile_avatar"
+          ></div>
         </div>
       </div>
     </header>

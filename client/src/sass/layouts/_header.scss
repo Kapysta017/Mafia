@@ -20,7 +20,6 @@ header{
 
 .header_container{
     width: 100%;
-
     display: grid;
     grid-template-columns: repeat(3,1fr);
 }
@@ -31,6 +30,13 @@ header{
     align-items: center;
 }
 
+.interactive_elements{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 112px 40px;
+}
+
 .header_button_container{
     display: flex;
     height: 40px;
@@ -39,6 +45,16 @@ header{
     button{
         flex-grow: 1;
     }
+}
+
+.profile_avatar{
+    background-image: url("/icons/avatar.png");
+    background-size: cover; 
+    margin-left: 40px;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    background-color: transparent;
 }
 
 a {
