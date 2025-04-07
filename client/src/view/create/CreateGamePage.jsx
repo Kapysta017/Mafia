@@ -7,15 +7,18 @@ const API_URL = "http://localhost:3000/lobby";
 
 export function CreateGamePage() {
   const [username, setUsername] = useState("");
+  const [avatarId, setAvatarId] = useState("");
   useEffect(() => {
     setUsername(localStorage.getItem("profileName"));
+    setAvatarId(Number(localStorage.getItem("profileAvatarId")));
   }, []);
   const navigate = useNavigate();
 
   const createLobby = async () => {
     try {
-      const response = await axios.post(`${API_URL}/create`, {
+      const response = await axios.post(`${API_URL}/createLobby`, {
         hostName: username,
+        avatarId: avatarId,
       });
       const lobbyId = response.data;
       localStorage.setItem("isHost", "true");
