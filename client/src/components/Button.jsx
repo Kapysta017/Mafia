@@ -10,7 +10,7 @@ export const Button = ({ variant, size, children, ...props }) => {
 };
 
 Button.propTypes = {
-  variant: PropTypes.oneOf(["primary", "secondary", "danger"]),
+  variant: PropTypes.oneOf(["primary", "secondary", "round"]),
   size: PropTypes.oneOf(["small", "medium", "large"]),
   children: PropTypes.node.isRequired,
 };
