@@ -1,0 +1,121 @@
+.host_main_container{
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.cheap_header{
+    margin-top: 48px;
+    margin-bottom: 48px;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.id_container{
+    display: grid;
+    gap:5px;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: end;
+    p{
+        -webkit-user-select: none; 
+        -moz-user-select: none; 
+        -ms-user-select: none;   
+        user-select: none;
+        cursor: pointer;
+        color: #6d6d6d;
+    }
+}
+
+.host_lobby_dashboard{
+    display: grid;
+    gap:20px;
+    grid-template-columns: 820px 400px;
+    justify-content: center;
+}
+
+.users_dashboard{
+    display: grid;
+    gap: 24px;
+    grid-template-rows: 466px 166px;
+
+    .user_list{
+        background-color: #1c1c1c;
+        border: solid 1px #3d3d3d;
+        border-radius: 16px;
+    }
+
+    .selected_user_container{
+        background-color: #1c1c1c;
+        border: solid 1px #3d3d3d;
+        border-radius: 16px;
+    }
+}
+
+.options_menu{
+    background-color: #1c1c1c;
+    border: solid 1px #3d3d3d;
+    border-radius: 16px;
+}
+
+.options_header{
+    margin-top: 18px;
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: center;
+}
+
+.options_grid_containers{
+    margin-left: 20px;
+    margin-right: 20px;
+    display: grid;
+    gap: 20px;
+    grid-template-rows: repeat(3,168px);
+}
+
+.options_item{
+    background-color: #161616;
+    border-radius: 8px;
+    border: solid 1px #3d3d3d;
+}
+
+.selected_user_container{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 35px;
+    grid-template-columns: 666px 44px;
+}
+
+.user_list{
+    padding: 18px 62px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 130px));
+    gap:0 40px;
+    align-items: center;
+    justify-content: space-between;
+    .user_item{
+        display: grid;
+        height: 105px;
+        width: 120px;
+        gap: 12px;
+        justify-content: center;
+        cursor: pointer;
+    }
+}
+
+.selected_user_info{
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 120px 505px;
+}
+.selected_user_avatar{
+ height: 130px;
+ display: grid;
+ justify-content: center;
+}
+.selected_user_settings{
+    background-color: #161616;
+    border-radius: 8px;
+    border: solid 1px #3d3d3d;
+}

@@ -25,7 +25,9 @@ export function CreateGamePage() {
     try {
       const response = await axios.post(`${API_URL}/createLobby`, {
         hostName: username,
-        avatarId: avatarId,
+        avatarId,
+        playersNumber,
+        mafiaNumber,
       });
       const lobbyId = response.data;
       localStorage.setItem("isHost", "true");

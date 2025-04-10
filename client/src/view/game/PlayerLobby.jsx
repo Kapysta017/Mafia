@@ -27,7 +27,7 @@ export function PlayerLobby({ host, users }) {
               <img src={getAvatarUrl(user.avatarId)} className="avatar"></img>
               <div className="player_name">
                 {user.username.length > 10
-                  ? user.substring(0, 10) + "..."
+                  ? user.username.substring(0, 10) + "..."
                   : user.username}
               </div>
             </div>

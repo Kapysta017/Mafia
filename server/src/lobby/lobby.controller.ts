@@ -6,8 +6,21 @@ export class LobbyController {
   constructor(private readonly lobbyService: LobbyService) {}
 
   @Post('createLobby')
-  create(@Body() body: { hostName: string; avatarId: number }) {
-    return this.lobbyService.createLobby(body.hostName, body.avatarId);
+  create(
+    @Body()
+    body: {
+      hostName: string;
+      avatarId: number;
+      playersNumber: number;
+      mafiaNumber: number;
+    },
+  ) {
+    return this.lobbyService.createLobby(
+      body.hostName,
+      body.avatarId,
+      body.playersNumber,
+      body.mafiaNumber,
+    );
   }
 
   @Post('join/:lobbyId')

@@ -6,17 +6,31 @@ export interface Player {
   avatarId: number;
 }
 
+export interface Settings {
+  playersNumber: number;
+  mafiaNumber: number;
+}
+
 @Injectable()
 export class LobbyService {
-  private lobbies = new Map<string, { host: Player; players: Player[] }>();
+  private lobbies = new Map<
+    string,
+    { host: Player; players: Player[]; settings: Settings }
+  >();
 
   constructor(private readonly lobbyGateway: LobbyGateway) {}
 
-  createLobby(hostName: string, avatarId: number) {
+  createLobby(
+    hostName: string,
+    avatarId: number,
+    playersNumber: number,
+    mafiaNumber: number,
+  ) {
     const lobbyId = Math.random().toString(36).substring(2, 8);
     const newLobby = {
       host: { username: hostName, avatarId },
       players: [],
+      settings: { playersNumber, mafiaNumber },
     };
     this.lobbies.set(lobbyId, newLobby);
     return lobbyId;
@@ -30,6 +44,10 @@ export class LobbyService {
 
     if (lobby.players.find((p) => p.username === player.username)) {
       return { success: false, message: 'Гравець уже в лобі' };
+    }
+
+    if (lobby.settings.playersNumber === lobby.players.length) {
+      return { success: false, message: 'Лоббі заповнене' };
     }
 
     lobby.players.push(player);
