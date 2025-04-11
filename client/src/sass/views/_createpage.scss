@@ -67,6 +67,57 @@
     }
 }
 
+.search_icon{
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) invert(30%) sepia(100%) hue-rotate(10deg);
+}
+
+.roles_window{
+  position: absolute;
+  max-width: 520px;
+  top: 650px;
+  left: 610px;
+  background-color: #1c1c1c;
+  border: solid 1px #3d3d3d;
+  border-radius: 16px;
+  padding: 12px;
+
+
+}
+
+.roles_container{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.role_header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.role_item {
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;   
+  user-select: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border: 1px solid #dc791E;
+  color: #dc791E;
+  margin: 4px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.role_item.active {
+  color:#E89D37;
+  box-shadow: 0px 0px 5px #DC791E; 
+}
+
 
 .go_next_button{
     display: flex;
