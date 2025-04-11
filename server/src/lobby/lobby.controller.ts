@@ -1,5 +1,5 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
-import { LobbyService } from './lobby.service';
+import { Controller, Post, Get, Body, Param, Patch } from '@nestjs/common';
+import { LobbyService, Roles } from './lobby.service';
 
 @Controller('lobby')
 export class LobbyController {
@@ -13,6 +13,7 @@ export class LobbyController {
       avatarId: number;
       playersNumber: number;
       mafiaNumber: number;
+      roles: Roles[];
     },
   ) {
     return this.lobbyService.createLobby(
@@ -20,6 +21,7 @@ export class LobbyController {
       body.avatarId,
       body.playersNumber,
       body.mafiaNumber,
+      body.roles,
     );
   }
 
@@ -42,5 +44,13 @@ export class LobbyController {
   @Get(':lobbyId')
   getLobby(@Param('lobbyId') lobbyId: string) {
     return this.lobbyService.getLobby(lobbyId);
+  }
+
+  @Patch('updateRoles/:lobbyId')
+  updateRoles(
+    @Param('lobbyId') lobbyId: string,
+    @Body('roles') roles: Roles[],
+  ) {
+    return this.lobbyService.updateRoles(lobbyId, roles);
   }
 }
