@@ -40,7 +40,6 @@
   .btn-secondary:hover {
     color:#E89D37;
     border: solid #E89D37 2px;
-
   }
 
   .btn-secondary:active{
@@ -57,4 +56,17 @@
     color: #3D3D3D;
   }
   
+  .btn-round{
+    border-radius: 999px;
+    border: solid 2px #DC791E;
+    color: #DC791E;
+    background-color: transparent;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
   
+  .btn-round:hover{
+    color:#E89D37;
+    border: solid #E89D37 2px; 
+  }
