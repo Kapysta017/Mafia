@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { avatars } from "../../utils/avatars";
 import { useParams } from "react-router-dom";
+import { Button } from "../../components/Button";
+import { getBorderColorByRole } from "../../utils/getSomethingByRole";
+import axios from "axios";
 export function HostLobby({ settings, host, users }) {
-  let params = useParams();
+  const { lobbyId } = useParams();
   const [selectedUser, setSelectedUser] = useState({});
   useEffect(() => {
     if (host) setSelectedUser(host);
@@ -11,6 +14,31 @@ export function HostLobby({ settings, host, users }) {
     const avatar = avatars.find((avatar) => avatar.id === avatarId);
     return avatar ? avatar.url : "/avatars/default.png";
   };
+
+  const resetRoles = async (lobbyId) => {
+    try {
+      await axios.post(`http://localhost:3000/lobby/resetRoles/${lobbyId}`, {
+        lobbyId,
+      });
+
+      console.log("Ролі скинуто");
+    } catch (err) {
+      console.error("Помилка скидання ролей:", err);
+    }
+  };
+
+  const assignRoles = async (lobbyId) => {
+    try {
+      await axios.post(`http://localhost:3000/lobby/assign-roles/${lobbyId}`, {
+        lobbyId,
+      });
+
+      console.log("Ролі задано");
+    } catch (err) {
+      console.error("Помилка надсилання ролей:", err);
+    }
+  };
+
   return (
     <div className="host_lobby_container">
       <div className="create_image_container">
@@ -22,11 +50,11 @@ export function HostLobby({ settings, host, users }) {
             Гравців в лобі:{users.length}/{settings.playersNumber}
           </div>
           <div className="id_container">
-            <div className="id_value">Код: {params.lobbyId}</div>
+            <div className="id_value">Код: {lobbyId}</div>
             <div className="id_copy">
               <p
                 className="bc2"
-                onClick={() => navigator.clipboard.writeText(params.lobbyId)}
+                onClick={() => navigator.clipboard.writeText(lobbyId)}
               >
                 Копіювати
               </p>
@@ -43,6 +71,9 @@ export function HostLobby({ settings, host, users }) {
                   onClick={() => setSelectedUser(user)}
                 >
                   <img
+                    style={{
+                      border: getBorderColorByRole(user.role),
+                    }}
                     src={getAvatarUrl(user.avatarId)}
                     className="avatar"
                   ></img>
@@ -59,6 +90,9 @@ export function HostLobby({ settings, host, users }) {
                 <div className="selected_user_info">
                   <div className="selected_user_avatar">
                     <img
+                      style={{
+                        border: getBorderColorByRole(selectedUser.role),
+                      }}
                       src={getAvatarUrl(selectedUser.avatarId)}
                       className="avatar"
                     />
@@ -68,7 +102,9 @@ export function HostLobby({ settings, host, users }) {
                         : selectedUser.username}
                     </div>
                   </div>
-                  <div className="selected_user_settings"></div>
+                  <div className="selected_user_settings">
+                    <p>{selectedUser.role}</p>
+                  </div>
                 </div>
                 <div className="selected_user_buttons">
                   <div></div>
@@ -81,8 +117,18 @@ export function HostLobby({ settings, host, users }) {
             <div className="options_header">Додаткові налаштування</div>
             <div className="options_grid_containers">
               <div className="options_item"></div>
-              <div className="options_item"></div>
-              <div className="options_item"></div>
+              <div className="options_item">
+                <Button onClick={() => resetRoles(lobbyId)} variant="primary">
+                  {" "}
+                  Скинути ролі
+                </Button>
+              </div>
+              <div className="options_item">
+                <Button onClick={() => assignRoles(lobbyId)} variant="primary">
+                  {" "}
+                  Розподілити ролі
+                </Button>
+              </div>
             </div>
           </div>
         </div>

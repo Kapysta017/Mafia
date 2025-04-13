@@ -18,10 +18,6 @@ export function PlayerLobby({ host, users }) {
       <div className="rules"></div>
       <div className="players_container">
         <div className="player_dashboard">
-          <div className="player_item">
-            <img src={getAvatarUrl(host.avatarId)} className="avatar"></img>
-            <div className="player_name">{host.username}</div>
-          </div>
           {users.map((user, index) => (
             <div className="player_item" key={index}>
               <img src={getAvatarUrl(user.avatarId)} className="avatar"></img>

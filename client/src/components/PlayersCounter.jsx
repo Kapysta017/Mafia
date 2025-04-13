@@ -8,7 +8,6 @@ export const PlayersCounter = ({
 }) => {
   const substractDisabled = playersNumber <= 4;
   const addDisabled = playersNumber > 11;
-
   const handleSubstractClick = () => {
     if (!substractDisabled) {
       setPlayersNumber(playersNumber - 1);
@@ -25,6 +24,8 @@ export const PlayersCounter = ({
     if (!addDisabled) {
       setPlayersNumber(playersNumber + 1);
     }
+    if (playersNumber == 5 || playersNumber == 8)
+      setMafiaNumber(mafiaNumber + 1);
   };
 
   return (

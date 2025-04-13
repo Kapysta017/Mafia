@@ -30,7 +30,7 @@ export function LobbyAwainting() {
   useEffect(() => {
     getLobby(lobbyId);
     socket.emit("joinLobby", { lobbyId });
-
+    socket.emit("");
     const handleLobbyUpdate = (updatedPlayers) => {
       setUsers(updatedPlayers);
     };

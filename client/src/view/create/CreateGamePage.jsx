@@ -7,6 +7,7 @@ import { PlayersCounter } from "../../components/PlayersCounter";
 import { MafiaCounter } from "../../components/MafiaCounter";
 import { Table } from "../../components/Table";
 import { initialRoles } from "../../utils/roles";
+import { RoleAssigner } from "../../components/RoleAssigner";
 const API_URL = "http://localhost:3000/lobby";
 
 export function CreateGamePage() {
@@ -18,16 +19,14 @@ export function CreateGamePage() {
   const [playersNumber, setPlayersNumber] = useState(4);
   const [mafiaNumber, setMafiaNumber] = useState(1);
   const [isRolesWindowOpen, setisRolesWindowOpen] = useState(false);
+
   useEffect(() => {
     setUsername(localStorage.getItem("profileName"));
     setAvatarId(Number(localStorage.getItem("profileAvatarId")));
   }, []);
+
   const navigate = useNavigate();
-  const toggleRole = (index) => {
-    const updatedRoles = [...roles];
-    updatedRoles[index].status = !updatedRoles[index].status;
-    setRoles(updatedRoles);
-  };
+
   const createLobby = async () => {
     try {
       const response = await axios.post(`${API_URL}/createLobby`, {
@@ -112,28 +111,14 @@ export function CreateGamePage() {
         </Button>
       </div>
       {isRolesWindowOpen && (
-        <div className="roles_window">
-          <div className="role_header">
-            <p>Оберіть ролі:</p>
-            <Button
-              variant="round"
-              onClick={() => setisRolesWindowOpen(!isRolesWindowOpen)}
-            >
-              X
-            </Button>
-          </div>
-          <div className="roles_container">
-            {roles.map((role, index) => (
-              <div
-                key={role.roleName}
-                className={`role_item ${role.status ? "active" : ""}`}
-                onClick={() => toggleRole(index)}
-              >
-                {role.roleName}
-              </div>
-            ))}
-          </div>
-        </div>
+        <RoleAssigner playersNumber={playersNumber} mafiaNumber={mafiaNumber}>
+          <Button
+            variant="round"
+            onClick={() => setisRolesWindowOpen(!isRolesWindowOpen)}
+          >
+            X
+          </Button>
+        </RoleAssigner>
       )}
     </main>
   );

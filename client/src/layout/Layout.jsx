@@ -23,7 +23,7 @@ export function Layout({ children }) {
             <Link to={"/"}>
               <p className="hf">Пожертвування</p>
             </Link>
-            <Link to={"/"}>
+            <Link to={"/start"}>
               <p className="hf">Почати Гру</p>
             </Link>
             <Link to={"/profile"}>

@@ -1,9 +1,12 @@
 import { Controller, Post, Get, Body, Param, Patch } from '@nestjs/common';
 import { LobbyService, Roles } from './lobby.service';
-
+import { LobbyGateway } from '../gateway/lobby.gateway';
 @Controller('lobby')
 export class LobbyController {
-  constructor(private readonly lobbyService: LobbyService) {}
+  constructor(
+    private readonly lobbyService: LobbyService,
+    private readonly lobbyGateway: LobbyGateway,
+  ) {}
 
   @Post('createLobby')
   create(
@@ -52,5 +55,19 @@ export class LobbyController {
     @Body('roles') roles: Roles[],
   ) {
     return this.lobbyService.updateRoles(lobbyId, roles);
+  }
+
+  @Post('assign-roles/:lobbyId')
+  assignRoles(@Param('lobbyId') lobbyId: string) {
+    this.lobbyService.assignRoles(lobbyId);
+    this.lobbyGateway.emitLobbyPlayers(lobbyId);
+    return { message: 'Ролі розподілені' };
+  }
+
+  @Post('resetRoles/:lobbyId')
+  resetRoles(@Param('lobbyId') lobbyId: string) {
+    this.lobbyService.resetRoles(lobbyId);
+    this.lobbyGateway.emitLobbyPlayers(lobbyId);
+    return { message: 'Ролі скинуто' };
   }
 }

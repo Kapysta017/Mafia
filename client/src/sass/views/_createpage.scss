@@ -118,6 +118,13 @@
   box-shadow: 0px 0px 5px #DC791E; 
 }
 
+.role_item.disabled {
+  pointer-events: none;
+  border: 1px solid #6d6d6d;
+  color: #6d6d6d;
+  cursor: not-allowed;
+}
+
 
 .go_next_button{
     display: flex;

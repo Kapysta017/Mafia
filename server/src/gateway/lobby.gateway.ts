@@ -24,15 +24,18 @@ export class LobbyGateway {
     this.server.to(lobbyId).emit('lobbyUpdated', players);
   }
 
+  emitLobbyPlayers(lobbyId: string) {
+    const lobby = this.lobbyService.getLobby(lobbyId);
+    if ('players' in lobby) {
+      this.server.to(lobbyId).emit('lobbyUpdated', lobby.players);
+    } else {
+      console.error(`Лобі ${lobbyId} не знайдено.`);
+    }
+  }
+
   @SubscribeMessage('joinLobby')
   handleJoinLobby(@MessageBody() data: { lobbyId: string; username: string }) {
     this.server.socketsJoin(data.lobbyId);
-    const lobby = this.lobbyService.getLobby(data.lobbyId);
-
-    if ('players' in lobby) {
-      this.server.to(data.lobbyId).emit('lobbyUpdated', lobby.players);
-    } else {
-      console.error(`Лобі ${data.lobbyId} не знайдено.`);
-    }
+    this.emitLobbyPlayers(data.lobbyId);
   }
 }
