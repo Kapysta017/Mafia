@@ -70,4 +70,20 @@ export class LobbyController {
     this.lobbyGateway.emitLobbyPlayers(lobbyId);
     return { message: 'Ролі скинуто' };
   }
+
+  @Post('setReadyStatus/:lobbyId')
+  handlePlayerReadyStatus(
+    @Param('lobbyId') lobbyId: string,
+    @Body() body: { username: string; ready: boolean },
+  ) {
+    const result = this.lobbyService.handlePlayerReadyStatus(
+      lobbyId,
+      body.username,
+      body.ready,
+    );
+
+    this.lobbyGateway.emitLobbyPlayers(lobbyId);
+
+    return result;
+  }
 }

@@ -1,8 +1,12 @@
 import { Button } from "../../components/Button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { avatars } from "../../utils/avatars";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 export function PlayerLobby({ host, users }) {
+  const { lobbyId } = useParams();
   const [username, setUsername] = useState("");
+  const [isReady, setIsReady] = useState(false);
   useEffect(() => {
     setUsername(localStorage.getItem("profileName"));
   }, []);
@@ -11,6 +15,24 @@ export function PlayerLobby({ host, users }) {
     const avatar = avatars.find((avatar) => avatar.id === avatarId);
     return avatar ? avatar.url : "/avatars/default.png";
   };
+  const setReadyStatus = async (lobbyId) => {
+    try {
+      await axios.post(
+        `http://localhost:3000/lobby/setReadyStatus/${lobbyId}`,
+        {
+          username,
+          ready: isReady,
+        }
+      );
+    } catch (error) {
+      console.error("Помилка в надсиланні статусу:", error);
+    }
+  };
+  useEffect(() => {
+    if (username) {
+      setReadyStatus(lobbyId);
+    }
+  }, [isReady]);
 
   return (
     <div className="player_lobby_container">
@@ -42,9 +64,31 @@ export function PlayerLobby({ host, users }) {
             <div className="player_name">{username}</div>
           </div>
           <div className="ready_status">
-            <div className="status">status</div>
+            {isReady ? (
+              <div
+                className="status"
+                style={{
+                  color: "green",
+                }}
+              >
+                ✓
+              </div>
+            ) : (
+              <div
+                className="status"
+                style={{
+                  color: "red",
+                }}
+              >
+                X
+              </div>
+            )}
             <div className="ready_button">
-              <Button variant="secondary" size="medium">
+              <Button
+                onClick={() => setIsReady((prev) => !prev)}
+                variant="secondary"
+                size="medium"
+              >
                 Готовий
               </Button>
             </div>

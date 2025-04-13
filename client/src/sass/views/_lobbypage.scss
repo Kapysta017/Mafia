@@ -82,6 +82,15 @@
         grid-template-columns: 100px 1fr;
         align-items: center;
         margin-left: auto;
+
+
+        .status{
+            display: flex;
+            justify-content: end;
+            font-size: 32px;
+            margin-right: 20px;
+            align-items: center;
+        }
     }
 
     .ready_button{

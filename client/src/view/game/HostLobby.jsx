@@ -39,6 +39,15 @@ export function HostLobby({ settings, host, users }) {
     }
   };
 
+  const setUserNameColor = (status) => {
+    switch (status) {
+      case true:
+        return "green";
+      default:
+        return "black";
+    }
+  };
+
   return (
     <div className="host_lobby_container">
       <div className="create_image_container">
@@ -77,7 +86,12 @@ export function HostLobby({ settings, host, users }) {
                     src={getAvatarUrl(user.avatarId)}
                     className="avatar"
                   ></img>
-                  <div className="player_name">
+                  <div
+                    className="player_name"
+                    style={{
+                      color: setUserNameColor(user.ready),
+                    }}
+                  >
                     {user.username.length > 10
                       ? user.username.substring(0, 10) + "..."
                       : user.username}

@@ -5,6 +5,7 @@ export interface Player {
   username: string;
   avatarId: number;
   role?: string;
+  ready?: boolean;
 }
 
 export interface Settings {
@@ -133,5 +134,17 @@ export class LobbyService {
       players[i].role = 'Мирний';
     }
     return { message: 'Ролі скинуто успішно', players: players };
+  }
+
+  handlePlayerReadyStatus(lobbyId: string, username: string, ready: boolean) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return;
+
+    const player = lobby.players.find((p) => p.username === username);
+    if (player) {
+      player.ready = ready;
+    }
+
+    return { message: 'Статус встановленно успішно' };
   }
 }
