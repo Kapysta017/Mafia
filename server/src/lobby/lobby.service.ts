@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { LobbyGateway } from '../gateway/lobby.gateway';
+import { RoleActionService } from './roleAction.service';
 
 export interface Player {
+  id?: number;
   username: string;
   avatarId: number;
   role?: string;
   ready?: boolean;
+  alive?: boolean;
+  action?: boolean;
 }
 
 export interface Settings {
@@ -17,16 +20,31 @@ export interface Settings {
 export interface Roles {
   roleName: string;
   status: boolean;
+  action?: boolean;
+  ableToAct?: boolean;
+}
+type GameState = 'waiting' | 'night' | 'day' | 'voting' | 'ended';
+
+export interface Lobby {
+  host: Player;
+  players: Player[];
+  settings: Settings;
+  state: GameState;
+  aiAnswer: boolean;
+  nightActions?: NightActions;
+}
+export interface NightActions {
+  blockedPlayers?: string[]; // куртизанка
+  mafiaTarget?: string; // мафія
+  healedPlayer?: string; // лікар
+  investigatedPlayer?: string; // комісар
+  // ...інші дії ролей
 }
 
 @Injectable()
 export class LobbyService {
-  private lobbies = new Map<
-    string,
-    { host: Player; players: Player[]; settings: Settings }
-  >();
-
-  constructor(private readonly lobbyGateway: LobbyGateway) {}
+  constructor(private readonly roleActionService: RoleActionService) {}
+  private lobbies = new Map<string, Lobby>();
 
   createLobby(
     hostName: string,
@@ -34,14 +52,20 @@ export class LobbyService {
     playersNumber: number,
     mafiaNumber: number,
     roles: Roles[],
+    aiAnswer: boolean,
   ) {
     const lobbyId = Math.random().toString(36).substring(2, 8);
+    const hostPlayer: Player = { id: 1, username: hostName, avatarId };
+
     const newLobby = {
-      host: { username: hostName, avatarId },
-      players: [],
+      host: hostPlayer,
+      players: aiAnswer ? [hostPlayer] : [],
       settings: { playersNumber, mafiaNumber, roles },
+      state: 'waiting' as GameState,
+      aiAnswer,
     };
     this.lobbies.set(lobbyId, newLobby);
+
     return lobbyId;
   }
 
@@ -56,13 +80,22 @@ export class LobbyService {
     }
 
     lobby.players.push(player);
-    return { success: true, players: lobby.players };
+    player.id = lobby.players.length;
+    return { success: true, players: lobby.players, id: player.id };
   }
 
   getLobby(lobbyId: string) {
     const lobby = this.lobbies.get(lobbyId);
     if (!lobby) return { message: 'Лобі не знайдено' };
     return lobby;
+  }
+
+  getPlayer(lobbyId: string, id: number) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+    const player = lobby.players.find((player) => player.id == id);
+    if (!player) return { message: `Гравця не знайдено` };
+    return player;
   }
 
   updateRoles(lobbyId: string, roles: Roles[]) {
@@ -136,15 +169,54 @@ export class LobbyService {
     return { message: 'Ролі скинуто успішно', players: players };
   }
 
-  handlePlayerReadyStatus(lobbyId: string, username: string, ready: boolean) {
+  handlePlayerReadyStatus(lobbyId: string, id: number, ready: boolean) {
     const lobby = this.lobbies.get(lobbyId);
     if (!lobby) return;
 
-    const player = lobby.players.find((p) => p.username === username);
+    const player = lobby.players.find((p) => p.id == id);
     if (player) {
       player.ready = ready;
     }
 
     return { message: 'Статус встановленно успішно' };
+  }
+  setAbleToAct(lobbyId: string, numberOfAction: number) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return;
+    const activeRoles = lobby.settings.roles.filter(
+      (role) => role.status === true && role.action === true,
+    );
+    activeRoles[numberOfAction].ableToAct = true;
+  }
+  startGame(lobbyId: string) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return;
+    const allReady = lobby.players.every((player) => player.ready);
+    // if (lobby.players.length < 4) {
+    //   return { message: 'Недостатньо гравців для початку гри' };
+    // }
+    if (!allReady) {
+      return { message: 'Не всі гравці готові' };
+    }
+    lobby.state = 'night';
+    this.setAbleToAct(lobbyId, 0);
+    return { message: 'Гра розпочалася' };
+  }
+
+  performRoleAction(
+    lobbyId: string,
+    roleName: string,
+    ...args: [string, string]
+  ) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+
+    switch (roleName) {
+      case 'Дон':
+        return this.roleActionService.performMafiaAction(lobby, ...args);
+      case 'Доктор':
+        return this.roleActionService.performDoctorAction(lobby, ...args);
+      // інші кейси
+    }
   }
 }

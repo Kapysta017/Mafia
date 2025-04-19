@@ -3,10 +3,17 @@ import { avatars } from "../../utils/avatars";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { getBorderColorByRole } from "../../utils/getSomethingByRole";
+import { socket } from "../../utils/socket";
 import axios from "axios";
-export function HostLobby({ settings, host, users }) {
+export function HostLobby({ settings, host, users, aiAnswer }) {
   const { lobbyId } = useParams();
   const [selectedUser, setSelectedUser] = useState({});
+  const [isReady, setIsReady] = useState(false);
+  const [username, setUsername] = useState("");
+  const id = localStorage.getItem("id");
+  useEffect(() => {
+    setUsername(localStorage.getItem("profileName"));
+  }, []);
   useEffect(() => {
     if (host) setSelectedUser(host);
   }, [host]);
@@ -17,10 +24,9 @@ export function HostLobby({ settings, host, users }) {
 
   const resetRoles = async (lobbyId) => {
     try {
-      await axios.post(`http://localhost:3000/lobby/resetRoles/${lobbyId}`, {
+      await axios.post(`http://localhost:3000/lobby/${lobbyId}/resetRoles`, {
         lobbyId,
       });
-
       console.log("Ролі скинуто");
     } catch (err) {
       console.error("Помилка скидання ролей:", err);
@@ -29,7 +35,7 @@ export function HostLobby({ settings, host, users }) {
 
   const assignRoles = async (lobbyId) => {
     try {
-      await axios.post(`http://localhost:3000/lobby/assign-roles/${lobbyId}`, {
+      await axios.post(`http://localhost:3000/lobby/${lobbyId}/assign-roles`, {
         lobbyId,
       });
 
@@ -44,10 +50,40 @@ export function HostLobby({ settings, host, users }) {
       case true:
         return "green";
       default:
-        return "black";
+        return "white";
     }
   };
+  const setReadyStatus = async (lobbyId) => {
+    try {
+      await axios.post(
+        `http://localhost:3000/lobby/${lobbyId}/setReadyStatus`,
+        {
+          id,
+          ready: isReady,
+        }
+      );
+    } catch (error) {
+      console.error("Помилка в надсиланні статусу:", error);
+    }
+  };
+  useEffect(() => {
+    if (username) {
+      setReadyStatus(lobbyId);
+    }
+  }, [isReady]);
 
+  const startGame = async (lobbyId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/lobby/${lobbyId}/startGame`
+      );
+      if (response.data.message === "Гра розпочалася") {
+      } else console.log("Не всі готові");
+    } catch (error) {
+      console.error("Помилка в надсиланні статусу:", error);
+    }
+  };
+  console.log(users);
   return (
     <div className="host_lobby_container">
       <div className="create_image_container">
@@ -110,7 +146,12 @@ export function HostLobby({ settings, host, users }) {
                       src={getAvatarUrl(selectedUser.avatarId)}
                       className="avatar"
                     />
-                    <div className="player_name">
+                    <div
+                      className="player_name"
+                      style={{
+                        color: setUserNameColor(selectedUser.ready),
+                      }}
+                    >
                       {selectedUser.username.length > 10
                         ? selectedUser.username.substring(0, 10) + "..."
                         : selectedUser.username}
@@ -118,6 +159,7 @@ export function HostLobby({ settings, host, users }) {
                   </div>
                   <div className="selected_user_settings">
                     <p>{selectedUser.role}</p>
+                    <p>{selectedUser.ready}</p>
                   </div>
                 </div>
                 <div className="selected_user_buttons">
@@ -145,6 +187,28 @@ export function HostLobby({ settings, host, users }) {
               </div>
             </div>
           </div>
+        </div>
+        <div className="start_button_container">
+          <Button
+            onClick={() => startGame(lobbyId)}
+            size="medium"
+            variant="primary"
+          >
+            Почати Гру
+          </Button>
+        </div>
+        <div>
+          {aiAnswer ? (
+            <Button
+              onClick={() => setIsReady((prev) => !prev)}
+              variant="secondary"
+              size="medium"
+            >
+              Готовий
+            </Button>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ export function StartGamePage() {
 
   const joinLobby = async () => {
     try {
-      const response = await axios.post(`${API_URL}/join/${lobbyId}`, {
+      const response = await axios.post(`${API_URL}/${lobbyId}/join`, {
         lobbyId: lobbyId,
         username: username,
         avatarId: avatarId,
@@ -35,6 +35,7 @@ export function StartGamePage() {
       if (response.data.success) {
         console.log("Гравець приєднався:", response.data.players);
         localStorage.removeItem("isHost");
+        localStorage.setItem("id", response.data.id);
         navigate(`/lobby/${lobbyId}`);
       } else {
         console.error("Помилка приєднання:", response.data.message);

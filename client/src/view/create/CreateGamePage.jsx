@@ -34,11 +34,12 @@ export function CreateGamePage() {
         avatarId,
         playersNumber,
         mafiaNumber,
+        aiAnswer,
       });
       const lobbyId = response.data;
       try {
         await axios.patch(
-          `http://localhost:3000/lobby/updateRoles/${lobbyId}`,
+          `http://localhost:3000/lobby/${lobbyId}/updateRoles`,
           {
             roles,
           }
@@ -47,6 +48,7 @@ export function CreateGamePage() {
         console.error("Помилка надсилання ролей:", err);
       }
       localStorage.setItem("isHost", "true");
+      localStorage.setItem("id", 1);
       navigate(`/lobby/${lobbyId}`);
     } catch (error) {
       console.error("Помилка створення лобі:", error);

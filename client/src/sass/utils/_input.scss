@@ -21,7 +21,28 @@ input[type="text"]:focus{
 input[type="text"]::placeholder{
     color: #DC791E;
     font-family: 'Ubuntu';
-    
     font-size: 20px;
 }
 
+input[type="message"]{
+    border-radius: 2px;
+    background-color: #161616;
+    padding: 0px;
+    color: #f7f8fa;
+    border: none;
+    font-family: 'Ubuntu';
+    font-size: 20px;
+    padding: 10px;
+    box-shadow: none; 
+    border-radius: 6px;
+}
+
+input[type="message"]::placeholder{
+    color: #5D5D5D;
+    font-family: 'Ubuntu';
+    font-size: 20px;
+}
+
+input[type="message"]:focus{
+    outline: none;
+}

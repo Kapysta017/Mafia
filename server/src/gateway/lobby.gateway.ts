@@ -33,6 +33,25 @@ export class LobbyGateway {
     }
   }
 
+  emitLobbyState(lobbyId: string) {
+    const lobby = this.lobbyService.getLobby(lobbyId);
+
+    if ('state' in lobby) {
+      this.server.to(lobbyId).emit('stateUpdated', lobby.state);
+    } else {
+      console.error(lobby.message);
+    }
+  }
+  @SubscribeMessage('chatMessage')
+  handleChatMessage(
+    @MessageBody() data: { lobbyId: string; username: string; text: string },
+  ) {
+    this.server.to(data.lobbyId).emit('chatMessage', {
+      username: data.username,
+      text: data.text,
+    });
+  }
+
   @SubscribeMessage('joinLobby')
   handleJoinLobby(@MessageBody() data: { lobbyId: string; username: string }) {
     this.server.socketsJoin(data.lobbyId);

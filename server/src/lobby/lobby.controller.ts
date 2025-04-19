@@ -17,6 +17,7 @@ export class LobbyController {
       playersNumber: number;
       mafiaNumber: number;
       roles: Roles[];
+      aiAnswer: boolean;
     },
   ) {
     return this.lobbyService.createLobby(
@@ -25,10 +26,11 @@ export class LobbyController {
       body.playersNumber,
       body.mafiaNumber,
       body.roles,
+      body.aiAnswer,
     );
   }
 
-  @Post('join/:lobbyId')
+  @Post(':lobbyId/join')
   joinLobby(
     @Body()
     {
@@ -44,12 +46,12 @@ export class LobbyController {
     return this.lobbyService.joinLobby(lobbyId, { username, avatarId });
   }
 
-  @Get(':lobbyId')
+  @Get(':lobbyId/getLobby')
   getLobby(@Param('lobbyId') lobbyId: string) {
     return this.lobbyService.getLobby(lobbyId);
   }
 
-  @Patch('updateRoles/:lobbyId')
+  @Patch(':lobbyId/updateRoles')
   updateRoles(
     @Param('lobbyId') lobbyId: string,
     @Body('roles') roles: Roles[],
@@ -57,33 +59,45 @@ export class LobbyController {
     return this.lobbyService.updateRoles(lobbyId, roles);
   }
 
-  @Post('assign-roles/:lobbyId')
+  @Post(':lobbyId/assign-roles')
   assignRoles(@Param('lobbyId') lobbyId: string) {
     this.lobbyService.assignRoles(lobbyId);
     this.lobbyGateway.emitLobbyPlayers(lobbyId);
     return { message: 'Ролі розподілені' };
   }
 
-  @Post('resetRoles/:lobbyId')
+  @Post(':lobbyId/resetRoles')
   resetRoles(@Param('lobbyId') lobbyId: string) {
     this.lobbyService.resetRoles(lobbyId);
     this.lobbyGateway.emitLobbyPlayers(lobbyId);
     return { message: 'Ролі скинуто' };
   }
 
-  @Post('setReadyStatus/:lobbyId')
+  @Post(':lobbyId/setReadyStatus')
   handlePlayerReadyStatus(
     @Param('lobbyId') lobbyId: string,
-    @Body() body: { username: string; ready: boolean },
+    @Body() body: { id: number; ready: boolean },
   ) {
     const result = this.lobbyService.handlePlayerReadyStatus(
       lobbyId,
-      body.username,
+      body.id,
       body.ready,
     );
 
     this.lobbyGateway.emitLobbyPlayers(lobbyId);
 
+    return result;
+  }
+
+  @Get(':lobbyId/:id/getPlayer')
+  getPlayer(@Param('lobbyId') lobbyId: string, @Param('id') id: number) {
+    return this.lobbyService.getPlayer(lobbyId, id);
+  }
+
+  @Get(':lobbyId/startGame')
+  startGame(@Param('lobbyId') lobbyId: string) {
+    const result = this.lobbyService.startGame(lobbyId);
+    this.lobbyGateway.emitLobbyState(lobbyId);
     return result;
   }
 }

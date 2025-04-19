@@ -103,3 +103,30 @@
         }
     }
 }
+
+.rules_awaitinig{
+
+}
+
+.rules_active{
+    margin-top: 70px;
+    margin-bottom: 48px;
+    max-width: 1400px;
+    min-width: 1400px;
+    justify-self: center;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+
+
+    .game_state{
+        justify-self: center;
+
+        h3{
+            font-size: 36px;
+        }
+    }
+
+    .player_counter{
+        justify-self: end;
+    }
+}

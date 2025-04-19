@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { initialRoles } from "../utils/roles";
+
 export function RoleAssigner({ children, playersNumber, mafiaNumber }) {
   const [roles, setRoles] = useState(initialRoles);
   const toggleRole = (index) => {
