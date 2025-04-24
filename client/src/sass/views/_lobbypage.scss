@@ -27,6 +27,7 @@
         max-width: 1400px;
     }
     .player_item{
+        cursor: pointer;
         display: grid;
         align-items: center;
         justify-content: center ;
@@ -47,6 +48,10 @@
     height: 68px;
     width: 68px;
     background-color: aliceblue;
+    &.selected_player {
+
+        border: 2px solid orange;
+      }
 }
 
 .player_ready_container{

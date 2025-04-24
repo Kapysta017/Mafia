@@ -42,6 +42,20 @@ export class LobbyGateway {
       console.error(lobby.message);
     }
   }
+
+  emitFullLobbyState(lobbyId: string) {
+    const lobby = this.lobbyService.getLobby(lobbyId);
+    if (
+      typeof lobby === 'object' &&
+      'players' in lobby &&
+      'settings' in lobby
+    ) {
+      this.server.to(lobbyId).emit('lobbyFullUpdate', lobby);
+    } else {
+      console.error(`Не вдалося надіслати lobbyFullUpdate для ${lobbyId}`);
+    }
+  }
+
   @SubscribeMessage('chatMessage')
   handleChatMessage(
     @MessageBody() data: { lobbyId: string; username: string; text: string },

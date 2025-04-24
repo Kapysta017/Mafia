@@ -100,4 +100,34 @@ export class LobbyController {
     this.lobbyGateway.emitLobbyState(lobbyId);
     return result;
   }
+  @Patch(':lobbyId/readyToVote')
+  handleVotingReadyStatus(
+    @Param('lobbyId') lobbyId: string,
+    @Body('id') id: number,
+  ) {
+    return this.lobbyService.handleVotingReadyStatus(lobbyId, id);
+  }
+  @Post(':lobbyId/start-night')
+  startNight(@Param('lobbyId') lobbyId: string) {
+    return this.lobbyService.performNightPhase(lobbyId);
+  }
+
+  @Post(':lobbyId/performAction')
+  performRoleAction(
+    @Param('lobbyId') lobbyId: string,
+    @Body('playerId') playerId: number,
+    @Body('targetId') targetId: number,
+  ) {
+    return this.lobbyService.performRoleAction(lobbyId, playerId, targetId);
+  }
+
+  @Patch(':lobbyId/startVote')
+  startVote(@Param('lobbyId') lobbyId: string) {
+    return this.lobbyService.startVote(lobbyId);
+  }
+
+  @Get(':lobbyId/getAllMafia')
+  getAllMafia(@Param('lobbyId') lobbyId: string) {
+    return this.lobbyService.getAllMafia(lobbyId);
+  }
 }

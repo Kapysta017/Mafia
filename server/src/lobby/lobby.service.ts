@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RoleActionService } from './roleAction.service';
-
+import { LobbyGateway } from 'src/gateway/lobby.gateway';
 export interface Player {
   id?: number;
   username: string;
@@ -23,8 +23,13 @@ export interface Roles {
   action?: boolean;
   ableToAct?: boolean;
 }
-type GameState = 'waiting' | 'night' | 'day' | 'voting' | 'ended';
+type PosibleStates = 'waiting' | 'night' | 'day' | 'voting' | 'ended';
 
+export interface GameState {
+  currentState: PosibleStates;
+  activeRole?: string;
+  readyToVote?: string[];
+}
 export interface Lobby {
   host: Player;
   players: Player[];
@@ -35,15 +40,18 @@ export interface Lobby {
 }
 export interface NightActions {
   blockedPlayers?: string[]; // куртизанка
-  mafiaTarget?: string; // мафія
-  healedPlayer?: string; // лікар
-  investigatedPlayer?: string; // комісар
-  // ...інші дії ролей
+  mafiaTarget?: Player; // Дон
+  healedPlayer?: Player; // лікар
+  investigatedPlayer?: number; // Комісар
+  proposals?: { mafiaId: number; targetId: number }[]; // мафія
 }
 
 @Injectable()
 export class LobbyService {
-  constructor(private readonly roleActionService: RoleActionService) {}
+  constructor(
+    private readonly roleActionService: RoleActionService,
+    private readonly lobbyGateway: LobbyGateway,
+  ) {}
   private lobbies = new Map<string, Lobby>();
 
   createLobby(
@@ -61,7 +69,7 @@ export class LobbyService {
       host: hostPlayer,
       players: aiAnswer ? [hostPlayer] : [],
       settings: { playersNumber, mafiaNumber, roles },
-      state: 'waiting' as GameState,
+      state: { currentState: 'waiting' as PosibleStates },
       aiAnswer,
     };
     this.lobbies.set(lobbyId, newLobby);
@@ -87,7 +95,25 @@ export class LobbyService {
   getLobby(lobbyId: string) {
     const lobby = this.lobbies.get(lobbyId);
     if (!lobby) return { message: 'Лобі не знайдено' };
-    return lobby;
+
+    const playersWithoutRoles = lobby.players.map(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ({ role, ...player }) => player,
+    );
+
+    const settingsWithAvailableRoles = {
+      ...lobby.settings,
+      roles: lobby.settings.roles.filter((r) => r.status !== false),
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { nightActions, players, ...lobbyWithoutSensitiveData } = lobby;
+
+    return {
+      ...lobbyWithoutSensitiveData,
+      players: playersWithoutRoles,
+      settings: settingsWithAvailableRoles,
+    };
   }
 
   getPlayer(lobbyId: string, id: number) {
@@ -169,6 +195,38 @@ export class LobbyService {
     return { message: 'Ролі скинуто успішно', players: players };
   }
 
+  handleVotingReadyStatus(lobbyId: string, id: number) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return;
+    const player = lobby.players.find((p) => p.id == id);
+    if (!lobby.state.readyToVote) {
+      lobby.state.readyToVote = [];
+    }
+    if (player?.alive === false) {
+      return { message: 'Гравець мертвий' };
+    }
+    if (player) {
+      lobby.state.readyToVote?.push(player.username);
+    }
+    this.lobbyGateway.emitLobbyState(lobbyId);
+    return { message: 'Статус встановленно успішно' };
+  }
+
+  startGame(lobbyId: string) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return;
+    const allReady = lobby.players.every((player) => player.ready);
+    // if (lobby.players.length < 4) {
+    //   return { message: 'Недостатньо гравців для початку гри' };
+    // }
+    if (!allReady) {
+      return { message: 'Не всі гравці готові' };
+    }
+    lobby.state.currentState = 'night';
+    lobby.players.every((p) => (p.alive = true));
+    return { message: 'Гра розпочалася' };
+  }
+
   handlePlayerReadyStatus(lobbyId: string, id: number, ready: boolean) {
     const lobby = this.lobbies.get(lobbyId);
     if (!lobby) return;
@@ -180,43 +238,117 @@ export class LobbyService {
 
     return { message: 'Статус встановленно успішно' };
   }
-  setAbleToAct(lobbyId: string, numberOfAction: number) {
+
+  startVote(lobbyId: string) {
     const lobby = this.lobbies.get(lobbyId);
     if (!lobby) return;
-    const activeRoles = lobby.settings.roles.filter(
-      (role) => role.status === true && role.action === true,
-    );
-    activeRoles[numberOfAction].ableToAct = true;
-  }
-  startGame(lobbyId: string) {
-    const lobby = this.lobbies.get(lobbyId);
-    if (!lobby) return;
-    const allReady = lobby.players.every((player) => player.ready);
-    // if (lobby.players.length < 4) {
-    //   return { message: 'Недостатньо гравців для початку гри' };
-    // }
-    if (!allReady) {
-      return { message: 'Не всі гравці готові' };
-    }
-    lobby.state = 'night';
-    this.setAbleToAct(lobbyId, 0);
-    return { message: 'Гра розпочалася' };
+    const deadPlayers = lobby.players.filter((p) => p.alive == false);
+    if (
+      lobby.state.readyToVote?.length ==
+      lobby.players.length - deadPlayers.length
+    ) {
+      lobby.state.currentState = 'voting';
+      lobby.state.readyToVote = [];
+      this.lobbyGateway.emitLobbyState(lobbyId);
+      return { message: 'Голосування розпочалось' };
+    } else return { message: 'Не усі готові голосувати' };
   }
 
-  performRoleAction(
-    lobbyId: string,
-    roleName: string,
-    ...args: [string, string]
-  ) {
+  waitForPlayerAction(lobby: Lobby, roleName: string): Promise<void> {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        const player = lobby.players.find(
+          (p) => p.role === roleName && p.action === true,
+        );
+        if (player) {
+          clearInterval(interval);
+          player.action = false;
+          resolve();
+        }
+      }, 500);
+    });
+  }
+
+  async performNightPhase(lobbyId: string) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+    const activeRoles = lobby.settings.roles.filter(
+      (role) => role.action === true && role.status === true,
+    );
+
+    for (const role of activeRoles) {
+      lobby.state.activeRole = role.roleName;
+      this.lobbyGateway.emitFullLobbyState(lobbyId);
+
+      // Очікуємо дію гравця
+      await this.waitForPlayerAction(lobby, role.roleName);
+      // Після дії
+      lobby.state.activeRole = 'Ніхто';
+    }
+
+    if (lobby.nightActions?.mafiaTarget) {
+      lobby.nightActions.mafiaTarget.alive = false;
+    }
+    if (lobby.nightActions?.healedPlayer) {
+      lobby.nightActions.healedPlayer.alive = true;
+    }
+
+    lobby.state.currentState = 'day';
+    this.lobbyGateway.emitFullLobbyState(lobbyId);
+    return { message: 'Ніч завершено' };
+  }
+
+  performRoleAction(lobbyId: string, playerId: number, targetId: number) {
     const lobby = this.lobbies.get(lobbyId);
     if (!lobby) return { message: 'Лобі не знайдено' };
 
-    switch (roleName) {
+    const targetName = lobby.players.find((p) => p.id === targetId)?.username;
+    const player = lobby.players.find((p) => p.id === playerId);
+    if (!player || !player.alive)
+      return { message: 'Гравця не знайдено або він мертвий' };
+
+    switch (player.role) {
       case 'Дон':
-        return this.roleActionService.performMafiaAction(lobby, ...args);
+      case 'Мафія':
+        this.roleActionService.performMafiaAction(
+          lobby,
+          playerId,
+          targetId,
+          targetName,
+        );
+        break;
       case 'Доктор':
-        return this.roleActionService.performDoctorAction(lobby, ...args);
-      // інші кейси
+        this.roleActionService.performDoctorAction(
+          lobby,
+          playerId,
+          targetId,
+          targetName,
+        );
+        break;
+      case 'Коханка':
+        this.roleActionService.performMistressAction(
+          lobby,
+          playerId,
+          targetId,
+          targetName,
+        );
+        break;
+      default:
+        return { message: 'У ролі немає активної дії' };
     }
+
+    player.action = true;
+  }
+
+  getAllMafia(lobbyId: string) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+    const allMafiaPlayers = lobby.players.filter(
+      (p) => p.role == 'Мафія' || p.role == 'Дон',
+    );
+    return allMafiaPlayers.filter((p) => ({
+      id: p.id,
+      username: p.username,
+    }));
   }
 }

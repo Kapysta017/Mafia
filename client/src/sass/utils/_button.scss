@@ -64,9 +64,36 @@
     width: 44px;
     height: 44px;
     font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .btn-round:hover{
     color:#E89D37;
     border: solid #E89D37 2px; 
+  }
+
+  .btn-round-solid{
+    display: flex;
+    border-radius: 999px;
+    border: solid 2px #DC791E;
+    color: black;
+    background-color: #DC791E;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .check{
+    width: 24px;
+    height: 18px;
+  }
+
+  .cancel{
+    width: 20px;
+    height: 20px;
   }

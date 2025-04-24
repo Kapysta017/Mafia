@@ -1,6 +1,7 @@
 import { Button } from "./Button";
 
-export function RoleButton({ role, selectedUser }) {
+export function RoleButton({ role, state, handleAction }) {
+  const isMyTurn = state.activeRole == role;
   switch (role) {
     case "Мирний":
       return (
@@ -25,17 +26,28 @@ export function RoleButton({ role, selectedUser }) {
     case "Дон":
       return (
         <div className="ready_button">
-          <Button variant="secondary" size="medium">
+          <Button
+            onClick={() => handleAction()}
+            variant="secondary"
+            disabled={!isMyTurn}
+            size="medium"
+          >
             Вбити гравця
           </Button>
         </div>
       );
     case "Мафія":
-      <div className="ready_button">
-        <Button variant="secondary" size="medium">
-          Висунути пропозицію
-        </Button>
-      </div>;
+      return (
+        <div className="ready_button">
+          <Button
+            onClick={() => handleAction()}
+            variant="secondary"
+            size="medium"
+          >
+            Висунути пропозицію
+          </Button>
+        </div>
+      );
     case "Комісар":
       <div className="ready_button">
         <Button variant="secondary" size="medium">
@@ -49,11 +61,18 @@ export function RoleButton({ role, selectedUser }) {
         </Button>
       </div>;
     case "Доктор":
-      <div className="ready_button">
-        <Button variant="secondary" size="medium">
-          Полікувати гравця
-        </Button>
-      </div>;
+      return (
+        <div className="ready_button">
+          <Button
+            onClick={() => handleAction()}
+            disabled={!isMyTurn}
+            variant="secondary"
+            size="medium"
+          >
+            Полікувати гравця
+          </Button>
+        </div>
+      );
     case "Коханка":
       <div className="ready_button">
         <Button variant="secondary" size="medium">

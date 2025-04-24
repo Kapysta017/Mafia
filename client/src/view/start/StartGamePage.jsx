@@ -35,7 +35,7 @@ export function StartGamePage() {
       if (response.data.success) {
         console.log("Гравець приєднався:", response.data.players);
         localStorage.removeItem("isHost");
-        localStorage.setItem("id", response.data.id);
+        sessionStorage.setItem("id", response.data.id);
         navigate(`/lobby/${lobbyId}`);
       } else {
         console.error("Помилка приєднання:", response.data.message);

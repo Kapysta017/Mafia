@@ -3,14 +3,13 @@ import { avatars } from "../../utils/avatars";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { getBorderColorByRole } from "../../utils/getSomethingByRole";
-import { socket } from "../../utils/socket";
 import axios from "axios";
 export function HostLobby({ settings, host, users, aiAnswer }) {
   const { lobbyId } = useParams();
   const [selectedUser, setSelectedUser] = useState({});
   const [isReady, setIsReady] = useState(false);
   const [username, setUsername] = useState("");
-  const id = localStorage.getItem("id");
+  const id = sessionStorage.getItem("id");
   useEffect(() => {
     setUsername(localStorage.getItem("profileName"));
   }, []);
@@ -83,7 +82,6 @@ export function HostLobby({ settings, host, users, aiAnswer }) {
       console.error("Помилка в надсиланні статусу:", error);
     }
   };
-  console.log(users);
   return (
     <div className="host_lobby_container">
       <div className="create_image_container">
@@ -163,8 +161,25 @@ export function HostLobby({ settings, host, users, aiAnswer }) {
                   </div>
                 </div>
                 <div className="selected_user_buttons">
-                  <div></div>
-                  <div></div>
+                  {aiAnswer ? (
+                    <div>
+                      <Button
+                        variant={isReady ? "round-solid" : "round"}
+                        onClick={() => setIsReady((prev) => !prev)}
+                      >
+                        <img
+                          className={isReady ? "check" : "cancel"}
+                          src={
+                            isReady
+                              ? "../../icons/check.png"
+                              : "../../icons/cancel-or.png"
+                          }
+                        ></img>
+                      </Button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             )}
@@ -196,19 +211,6 @@ export function HostLobby({ settings, host, users, aiAnswer }) {
           >
             Почати Гру
           </Button>
-        </div>
-        <div>
-          {aiAnswer ? (
-            <Button
-              onClick={() => setIsReady((prev) => !prev)}
-              variant="secondary"
-              size="medium"
-            >
-              Готовий
-            </Button>
-          ) : (
-            ""
-          )}
         </div>
       </div>
     </div>

@@ -47,8 +47,8 @@ export function CreateGamePage() {
       } catch (err) {
         console.error("Помилка надсилання ролей:", err);
       }
-      localStorage.setItem("isHost", "true");
-      localStorage.setItem("id", 1);
+      sessionStorage.setItem("isHost", "true");
+      sessionStorage.setItem("id", 1);
       navigate(`/lobby/${lobbyId}`);
     } catch (error) {
       console.error("Помилка створення лобі:", error);
