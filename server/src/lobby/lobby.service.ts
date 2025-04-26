@@ -9,6 +9,8 @@ export interface Player {
   ready?: boolean;
   alive?: boolean;
   action?: boolean;
+  votes?: number;
+  voted?: boolean;
 }
 
 export interface Settings {
@@ -114,6 +116,12 @@ export class LobbyService {
       players: playersWithoutRoles,
       settings: settingsWithAvailableRoles,
     };
+  }
+
+  getFullLobby(lobbyId: string) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+    return lobby;
   }
 
   getPlayer(lobbyId: string, id: number) {
@@ -277,12 +285,11 @@ export class LobbyService {
     );
 
     for (const role of activeRoles) {
+      console.log(`🎭 Роль ${role.roleName} діє`);
       lobby.state.activeRole = role.roleName;
       this.lobbyGateway.emitFullLobbyState(lobbyId);
 
-      // Очікуємо дію гравця
       await this.waitForPlayerAction(lobby, role.roleName);
-      // Після дії
       lobby.state.activeRole = 'Ніхто';
     }
 
@@ -350,5 +357,49 @@ export class LobbyService {
       id: p.id,
       username: p.username,
     }));
+  }
+
+  handleVote(lobbyId: string, playerId: number, targetId: number) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+
+    const player = lobby.players.find((p) => p.id === playerId);
+    if (!player) return { message: 'Гравця не знайдено' };
+
+    const target = lobby.players.find((p) => p.id === targetId);
+    if (!target) return { message: 'Ціль не знайдена' };
+
+    if (typeof target.votes !== 'number') {
+      target.votes = 0;
+    }
+
+    player.voted = true;
+    target.votes += 1;
+
+    const alivePlayers = lobby.players.filter((p) => p.alive !== false);
+    const allPlayersVoted = alivePlayers.every((p) => p.voted);
+
+    if (allPlayersVoted) {
+      const maxVotes = Math.max(...lobby.players.map((p) => p.votes || 0));
+      const topVoted = lobby.players.filter((p) => (p.votes || 0) === maxVotes);
+
+      if (topVoted.length === 1) {
+        topVoted[0].alive = false;
+      } else {
+        console.log('Нічия. Жоден гравець не вибув.');
+      }
+
+      lobby.players.forEach((p) => {
+        p.voted = false;
+        p.votes = 0;
+      });
+
+      lobby.state.currentState = 'night';
+      this.lobbyGateway.emitFullLobbyState(lobbyId);
+    }
+
+    return {
+      message: `Гравець ${player.username} проголосував за ${target.username}`,
+    };
   }
 }

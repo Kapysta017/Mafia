@@ -25,7 +25,7 @@ export class LobbyGateway {
   }
 
   emitLobbyPlayers(lobbyId: string) {
-    const lobby = this.lobbyService.getLobby(lobbyId);
+    const lobby = this.lobbyService.getFullLobby(lobbyId);
     if ('players' in lobby) {
       this.server.to(lobbyId).emit('lobbyUpdated', lobby.players);
     } else {
@@ -34,7 +34,7 @@ export class LobbyGateway {
   }
 
   emitLobbyState(lobbyId: string) {
-    const lobby = this.lobbyService.getLobby(lobbyId);
+    const lobby = this.lobbyService.getFullLobby(lobbyId);
 
     if ('state' in lobby) {
       this.server.to(lobbyId).emit('stateUpdated', lobby.state);
@@ -44,7 +44,7 @@ export class LobbyGateway {
   }
 
   emitFullLobbyState(lobbyId: string) {
-    const lobby = this.lobbyService.getLobby(lobbyId);
+    const lobby = this.lobbyService.getFullLobby(lobbyId);
     if (
       typeof lobby === 'object' &&
       'players' in lobby &&

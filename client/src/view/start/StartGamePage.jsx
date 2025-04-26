@@ -34,7 +34,7 @@ export function StartGamePage() {
       });
       if (response.data.success) {
         console.log("Гравець приєднався:", response.data.players);
-        localStorage.removeItem("isHost");
+        sessionStorage.removeItem("isHost");
         sessionStorage.setItem("id", response.data.id);
         navigate(`/lobby/${lobbyId}`);
       } else {

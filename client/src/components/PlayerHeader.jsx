@@ -21,6 +21,16 @@ export function PlayerHeader({ state }) {
           <div className="player_counter">Живих гравців:12/12</div>
         </div>
       );
+    case "voting":
+      return (
+        <div className="rules_active">
+          <div className="day_counter">День: 1</div>
+          <div className="game_state">
+            <h3>ГОЛОСУВАННЯ</h3>
+          </div>
+          <div className="player_counter">Живих гравців:12/12</div>
+        </div>
+      );
     default:
       return null;
   }

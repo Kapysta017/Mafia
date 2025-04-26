@@ -40,12 +40,13 @@ export function PlayerLobby({ nightActions, settings, host, users, state }) {
       }
     };
     fetchUser();
-    socket.on("stateUpdated", fetchUser);
+    socket.on("lobbyFullUpdate", fetchUser);
 
     return () => {
-      socket.off("stateUpdated", fetchUser);
+      socket.off("lobbyFullUpdate", fetchUser);
     };
   }, []);
+
   const getAvatarUrl = (avatarId) => {
     const avatar = avatars.find((avatar) => avatar.id === avatarId);
     return avatar ? avatar.url : "/avatars/default.png";

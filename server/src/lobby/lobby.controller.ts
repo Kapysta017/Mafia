@@ -130,4 +130,12 @@ export class LobbyController {
   getAllMafia(@Param('lobbyId') lobbyId: string) {
     return this.lobbyService.getAllMafia(lobbyId);
   }
+
+  @Post(':lobbyId/vote')
+  handleVote(
+    @Param('lobbyId') lobbyId: string,
+    @Body() body: { playerId: number; targetId: number },
+  ) {
+    return this.lobbyService.handleVote(lobbyId, body.playerId, body.targetId);
+  }
 }

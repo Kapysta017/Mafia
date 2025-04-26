@@ -51,9 +51,9 @@ export function LobbyAwainting() {
       vote();
     }
   }, [state.readyToVote]);
-
+  const user = users.find((u) => u.id == sessionStorage.getItem("id"));
   useEffect(() => {
-    if (state.currentState == "night") {
+    if (state.currentState === "night" && user.id === host.id) {
       axios.post(`http://localhost:3000/lobby/${lobbyId}/start-night`);
     }
   }, [state.currentState]);

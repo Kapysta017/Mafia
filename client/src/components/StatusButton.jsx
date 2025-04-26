@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Button } from "./Button";
 import { RoleButton } from "./RoleButton";
-import { use } from "react";
+import { useEffect, useState } from "react";
 export function StatusButton({
   lobbyId,
   settings,
@@ -11,7 +11,14 @@ export function StatusButton({
   user,
   selectedUser,
 }) {
-  const hasVoted = state.readyToVote?.includes(user.username);
+  const [hasVoted, setHasVoted] = useState(false);
+  const [hasPressedReadyToVote, setHasPressedReadyToVote] = useState(false);
+  const ableToVote = user?.alive;
+
+  useEffect(() => {
+    setHasVoted(false);
+    setHasPressedReadyToVote(false);
+  }, [state.currentState]);
 
   const handleAction = async () => {
     await axios.post(`http://localhost:3000/lobby/${lobbyId}/performAction`, {
@@ -19,10 +26,19 @@ export function StatusButton({
       targetId: selectedUser.id,
     });
   };
-  const handleVote = async () => {
+  const handleReadyToVote = async () => {
     await axios.patch(`http://localhost:3000/lobby/${lobbyId}/readyToVote`, {
       id: user.id,
     });
+    setHasPressedReadyToVote(true);
+  };
+
+  const handleVote = async () => {
+    await axios.post(`http://localhost:3000/lobby/${lobbyId}/vote`, {
+      playerId: user.id,
+      targetId: selectedUser.id,
+    });
+    setHasVoted(true);
   };
   switch (state.currentState) {
     case "waiting":
@@ -70,12 +86,25 @@ export function StatusButton({
       return (
         <div className="ready_button">
           <Button
-            onClick={() => handleVote()}
-            disabled={hasVoted}
+            onClick={() => handleReadyToVote()}
+            disabled={!ableToVote || hasPressedReadyToVote}
             variant="secondary"
             size="medium"
           >
             Розпочати Голосування
+          </Button>
+        </div>
+      );
+    case "voting":
+      return (
+        <div className="ready_button">
+          <Button
+            disabled={!ableToVote || hasVoted}
+            onClick={() => handleVote()}
+            variant="secondary"
+            size="medium"
+          >
+            Проголосувати
           </Button>
         </div>
       );
