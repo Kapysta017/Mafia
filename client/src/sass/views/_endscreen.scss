@@ -1,0 +1,53 @@
+.end_page_container {
+   margin: 120px 100px;
+   margin-bottom: 230px;
+   h2{
+    place-self: center;
+    margin-bottom: 120px;
+   }
+  }
+  
+  .end_page_grid {
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, min(161px));
+    gap: 64px;
+  }
+  
+  .role_container {
+    height: 189px;
+    display: grid;
+    grid-template-rows: 28px auto;
+    gap: 10px;
+  }
+  
+  .role_info {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+  }
+  
+  .players_list {
+    background-color: #1C1C1C;
+    border: 1px solid #3D3D3D;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+
+
+    .hf{
+        margin-top: 12px;
+    }
+  }
+  
+  .player_avatar {
+    display: flex;
+    width: 120px;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  

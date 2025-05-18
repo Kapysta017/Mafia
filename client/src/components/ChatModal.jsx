@@ -2,12 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { socket } from "../utils/socket";
 import { Button } from "./Button";
 
-export function ChatModal({ lobbyId, username }) {
+export function ChatModal({ avaibleChat, lobbyId, username }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatOpen, setChatOpen] = useState(false);
   const chatRef = useRef(null);
-
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -71,8 +70,13 @@ export function ChatModal({ lobbyId, username }) {
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Повідомлення..."
             />
-            <Button size="medium" variant="secondary" disabled>
-              Місто спить
+            <Button
+              onClick={() => sendMessage()}
+              size="medium"
+              variant="secondary"
+              disabled={!avaibleChat}
+            >
+              {avaibleChat ? ">" : "X"}
             </Button>
           </div>
         </div>

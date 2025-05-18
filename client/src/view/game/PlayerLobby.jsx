@@ -7,7 +7,14 @@ import { ChatModal } from "../../components/ChatModal";
 import { PlayerHeader } from "../../components/PlayerHeader";
 import axios from "axios";
 import { StatusButton } from "../../components/StatusButton";
-export function PlayerLobby({ nightActions, settings, host, users, state }) {
+export function PlayerLobby({
+  avaibleChat,
+  nightActions,
+  settings,
+  host,
+  users,
+  state,
+}) {
   const { lobbyId } = useParams();
   const [username, setUsername] = useState("");
   const [selectedUser, setSelectedUser] = useState({});
@@ -15,7 +22,11 @@ export function PlayerLobby({ nightActions, settings, host, users, state }) {
   const [user, setUser] = useState({});
   const [mafia, setMafia] = useState([]);
   const [mafiaProposals, setMafiaProposals] = useState([]);
+  if (state.currentState !== "night") {
+    avaibleChat = user.alive;
+  }
   useEffect(() => {
+    console.log(nightActions?.proposals);
     if (nightActions?.proposals) {
       const targets = nightActions.proposals.map((p) => p.targetId);
       setMafiaProposals(targets);
@@ -86,12 +97,12 @@ export function PlayerLobby({ nightActions, settings, host, users, state }) {
       console.error("Гравця е знайдено:", error);
     }
   };
+
   useEffect(() => {
     if (username) {
       setReadyStatus(lobbyId);
     }
   }, [isReady]);
-
   return (
     <div className="player_lobby_container">
       <h2>Приватний стіл: {host.username}</h2>
@@ -163,7 +174,11 @@ export function PlayerLobby({ nightActions, settings, host, users, state }) {
           ></StatusButton>
         </div>
       </div>
-      <ChatModal lobbyId={lobbyId} username={username} />
+      <ChatModal
+        avaibleChat={avaibleChat}
+        lobbyId={lobbyId}
+        username={username}
+      />
     </div>
   );
 }

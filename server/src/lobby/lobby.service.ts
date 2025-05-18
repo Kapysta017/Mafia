@@ -31,6 +31,7 @@ export interface GameState {
   currentState: PosibleStates;
   activeRole?: string;
   readyToVote?: string[];
+  winner?: string;
 }
 export interface Lobby {
   host: Player;
@@ -228,10 +229,18 @@ export class LobbyService {
     //   return { message: 'Недостатньо гравців для початку гри' };
     // }
     if (!allReady) {
+      this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+        username: 'Система',
+        text: 'Не всі гравці готові!',
+      });
       return { message: 'Не всі гравці готові' };
     }
     lobby.state.currentState = 'night';
     lobby.players.every((p) => (p.alive = true));
+    this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+      username: 'Система',
+      text: 'Гра розпочалася!',
+    });
     return { message: 'Гра розпочалася' };
   }
 
@@ -258,6 +267,10 @@ export class LobbyService {
       lobby.state.currentState = 'voting';
       lobby.state.readyToVote = [];
       this.lobbyGateway.emitLobbyState(lobbyId);
+      this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+        username: 'Система',
+        text: 'Голосування розпочалось!',
+      });
       return { message: 'Голосування розпочалось' };
     } else return { message: 'Не усі готові голосувати' };
   }
@@ -285,7 +298,6 @@ export class LobbyService {
     );
 
     for (const role of activeRoles) {
-      console.log(`🎭 Роль ${role.roleName} діє`);
       lobby.state.activeRole = role.roleName;
       this.lobbyGateway.emitFullLobbyState(lobbyId);
 
@@ -299,9 +311,23 @@ export class LobbyService {
     if (lobby.nightActions?.healedPlayer) {
       lobby.nightActions.healedPlayer.alive = true;
     }
-
-    lobby.state.currentState = 'day';
-    this.lobbyGateway.emitFullLobbyState(lobbyId);
+    this.checkWinCondition(lobbyId);
+    if (lobby.state.currentState !== 'ended') {
+      lobby.state.currentState = 'day';
+      this.lobbyGateway.emitFullLobbyState(lobbyId);
+    }
+    this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+      username: 'Система',
+      text: 'Ніч завершено!',
+    });
+    if (lobby.nightActions?.mafiaTarget) {
+      if (lobby.nightActions.mafiaTarget.alive === false) {
+        this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+          username: 'Система',
+          text: `Гравця ${lobby.nightActions.mafiaTarget.username} знайшли мертвим`,
+        });
+      }
+    }
     return { message: 'Ніч завершено' };
   }
 
@@ -385,8 +411,15 @@ export class LobbyService {
 
       if (topVoted.length === 1) {
         topVoted[0].alive = false;
+        this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+          username: 'Система',
+          text: `Гравця ${topVoted[0].username} повісили`,
+        });
       } else {
-        console.log('Нічия. Жоден гравець не вибув.');
+        this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+          username: 'Система',
+          text: 'Нічия. Жоден гравець не вибув.!',
+        });
       }
 
       lobby.players.forEach((p) => {
@@ -397,9 +430,34 @@ export class LobbyService {
       lobby.state.currentState = 'night';
       this.lobbyGateway.emitFullLobbyState(lobbyId);
     }
-
+    this.lobbyGateway.server.to(lobbyId).emit('chatMessage', {
+      username: 'Система',
+      text: `Гравець ${player.username} проголосував за ${target.username}`,
+    });
     return {
       message: `Гравець ${player.username} проголосував за ${target.username}`,
     };
+  }
+
+  checkWinCondition(lobbyId: string) {
+    const lobby = this.lobbies.get(lobbyId);
+    if (!lobby) return { message: 'Лобі не знайдено' };
+
+    const alivePlayers = lobby.players.filter((p) => p.alive);
+    const mafiaPlayers = alivePlayers.filter(
+      (p) => p.role === 'Мафія' || p.role === 'Дон',
+    );
+    const civilianPlayers = alivePlayers.filter(
+      (p) => p.role !== 'Мафія' && p.role !== 'Дон',
+    );
+    if (mafiaPlayers.length === 0) {
+      lobby.state.currentState = 'ended';
+      lobby.state.winner = 'Мирні';
+      this.lobbyGateway.emitFullLobbyState(lobbyId);
+    } else if (mafiaPlayers.length > civilianPlayers.length) {
+      lobby.state.currentState = 'ended';
+      lobby.state.winner = 'Мафія';
+      this.lobbyGateway.emitFullLobbyState(lobbyId);
+    }
   }
 }
