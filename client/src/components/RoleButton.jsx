@@ -49,11 +49,18 @@ export function RoleButton({ role, state, handleAction }) {
         </div>
       );
     case "Комісар":
-      <div className="ready_button">
-        <Button variant="secondary" size="medium">
-          Перевірити гравця
-        </Button>
-      </div>;
+      return (
+        <div className="ready_button">
+          <Button
+            onClick={() => handleAction()}
+            disabled={!isMyTurn}
+            variant="secondary"
+            size="medium"
+          >
+            Перевірити гравця
+          </Button>
+        </div>
+      );
     case "Сержант":
       <div className="ready_button">
         <Button variant="secondary" size="medium">
@@ -74,11 +81,18 @@ export function RoleButton({ role, state, handleAction }) {
         </div>
       );
     case "Коханка":
-      <div className="ready_button">
-        <Button variant="secondary" size="medium">
-          Відвідати гравця
-        </Button>
-      </div>;
+      return (
+        <div className="ready_button">
+          <Button
+            onClick={() => handleAction()}
+            disabled={!isMyTurn}
+            variant="secondary"
+            size="medium"
+          >
+            Відвідати гравця
+          </Button>
+        </div>
+      );
     case "Безхатько":
       <div className="ready_button">
         <Button variant="secondary" size="medium">

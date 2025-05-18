@@ -5,6 +5,7 @@ import { HostLobby } from "./HostLobby";
 import { PlayerLobby } from "./PlayerLobby";
 import { socket } from "../../utils/socket";
 import { HostGame } from "./HostGame";
+import { EndScreen } from "./EndScreen";
 export function LobbyAwainting() {
   const { lobbyId } = useParams();
   const isHost = sessionStorage.getItem("isHost") === "true";
@@ -14,7 +15,7 @@ export function LobbyAwainting() {
   const [state, setState] = useState("");
   const [aiAnswer, setAiAnswer] = useState(Boolean);
   const [nightActions, setNightActions] = useState({});
-
+  const [avaibleChat, setAvaibleChat] = useState(true);
   const getLobby = async (lobbyId) => {
     try {
       const response = await axios.get(
@@ -51,9 +52,12 @@ export function LobbyAwainting() {
       vote();
     }
   }, [state.readyToVote]);
-  const user = users.find((u) => u.id == sessionStorage.getItem("id"));
+
   useEffect(() => {
-    if (state.currentState === "night" && user.id === host.id) {
+    if (state.currentState === "night") {
+      setAvaibleChat(false);
+    } else setAvaibleChat(true);
+    if (isHost && state.currentState === "night") {
       axios.post(`http://localhost:3000/lobby/${lobbyId}/start-night`);
     }
   }, [state.currentState]);
@@ -94,6 +98,7 @@ export function LobbyAwainting() {
         />
       ) : (
         <PlayerLobby
+          avaibleChat={avaibleChat}
           settings={settings}
           host={host}
           users={users}
@@ -113,6 +118,7 @@ export function LobbyAwainting() {
         </div>
       ) : (
         <PlayerLobby
+          avaibleChat={avaibleChat}
           nightActions={nightActions}
           host={host}
           users={users}
@@ -129,7 +135,12 @@ export function LobbyAwainting() {
           aiAnswer={aiAnswer}
         ></HostGame>
       ) : (
-        <PlayerLobby host={host} users={users} state={state} />
+        <PlayerLobby
+          avaibleChat={avaibleChat}
+          host={host}
+          users={users}
+          state={state}
+        />
       );
     case "voting":
       return isHost ? (
@@ -141,10 +152,17 @@ export function LobbyAwainting() {
           aiAnswer={aiAnswer}
         ></HostGame>
       ) : (
-        <PlayerLobby host={host} users={users} state={state} />
+        <PlayerLobby
+          avaibleChat={avaibleChat}
+          host={host}
+          users={users}
+          state={state}
+        />
       );
     case "ended":
-      return <div>Перемога</div>;
+      return (
+        <EndScreen settings={settings} state={state} users={users}></EndScreen>
+      );
     default:
       return <div> Невідомий стан гри</div>;
   }
