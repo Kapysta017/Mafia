@@ -11,10 +11,13 @@ git clone https://github.com/Kapysta017/Mafia.git
 cd Mafia
 
 Залежності та запуск:
-cd client
-npm install
-npm run dev
+Клієнт:
+- cd client
+- npm install
+- npm run dev
 
-cd ../server
-npm install
-npm run start:dev
+  
+Севрер:
+- cd server
+- npm install
+- npm run start:dev
