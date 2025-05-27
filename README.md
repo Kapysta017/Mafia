@@ -6,7 +6,6 @@ Mafia Web Game
 - **Backend:** NestJS, WebSocket, REST API
 - **База даних:** PostgreSQL (TypeORM)
 - **Інші:** Vite, ESLint, Prettier
-- 
 Швидкий старт
 git clone https://github.com/Kapysta017/Mafia.git
 cd Mafia
